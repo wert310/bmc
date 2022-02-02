@@ -213,7 +213,18 @@ class NonlinearBMC(BMC):
                 return z3.unsat
 
             print(f"Core #{iter_n}:", core)
-            while (lit := random.choice(core)).decl().name() == q_lit.decl().name(): pass
+
+            # One unrolling step for everything
+            for c_lit in core:
+                if z3.is_not(c_lit):
+                    c_path = c_lit.arg(0).decl().name().split("#")[1]
+                    pt_level = c_path.split('_')
+                    if len(pt_level) == 1:
+                        lit = c_lit
+                        break
+            else:
+                while (lit := random.choice(core)).decl().name() == q_lit.decl().name(): pass
+
             assert z3.is_not(lit)
             lit = lit.arg(0)
             literals.remove(lit)
@@ -223,8 +234,14 @@ class NonlinearBMC(BMC):
             args = LinearBMC._mk_args(rl_call, rl_path)
             r_conjs = [ exp == arg for exp, arg in args ]
 
+            # Store unrolling depth in the path (FIXME: move into a method)
+            rl_path_parts = rl_path.split('_')
+            if len(rl_path_parts) == 1:
+                rl_path_rec = f'{rl_path}_1'
+            else:
+                rnd, lvl = rl_path_parts
+                rl_path_rec = f'{rnd}_{int(lvl)+1}'
 
-            rl_path_rec = random_string(12)
             rules = []
             for r_idx, r in enumerate(rule_groups[rl_call.decl().name()]):
                 head, tail = BMC.split_rule(r)
