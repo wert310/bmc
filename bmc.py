@@ -39,6 +39,15 @@ class BMC(abc.ABC):
     def get_answer(self):
         raise NotImplementedError
 
+    @staticmethod
+    def split_rule(r):
+        r = r.body() if z3.is_quantifier(r) else r
+        head, tail = r, z3.BoolVal(True)
+        if z3.is_implies(r):
+            head, tail = r.arg(1), r.arg(0)
+        return head, tail
+
+
 
 class LinearBMC(BMC):
 
@@ -83,11 +92,7 @@ class LinearBMC(BMC):
         rule_names = collections.defaultdict(lambda: [])
 
         for r_idx, r in enumerate(self.rules):
-            r = r.body() if z3.is_quantifier(r) else r
-            head, tail = r, z3.BoolVal(True)
-            if z3.is_implies(r):
-                head, tail = r.arg(1), r.arg(0)
-
+            head, tail = BMC.split_rule(r)
             assert z3.is_app_of(head, z3.Z3_OP_UNINTERPRETED)
 
             level_rule_i = LinearBMC._mk_rule(head, level, r_idx)
@@ -179,14 +184,6 @@ class NonlinearBMC(BMC):
         self.paths[l] = path
         return l
 
-    @staticmethod
-    def _split_rule(r):
-        r = r.body() if z3.is_quantifier(r) else r
-        head, tail = r, z3.BoolVal(True)
-        if z3.is_implies(r):
-            head, tail = r.arg(1), r.arg(0)
-        return head, tail
-
 
     @staticmethod
     def _mk_vars(pred, exp, path):
@@ -197,7 +194,7 @@ class NonlinearBMC(BMC):
 
         rule_groups = collections.defaultdict(lambda: [])
         for r in self.rules:
-            head, _ = self._split_rule(r)
+            head, _ = BMC.split_rule(r)
             rule_groups[head.decl().name()].append(r)
 
         vs = self._mk_vars(query, query, 'query')
@@ -230,7 +227,7 @@ class NonlinearBMC(BMC):
             rl_path_rec = random_string(12)
             rules = []
             for r_idx, r in enumerate(rule_groups[rl_call.decl().name()]):
-                head, tail = self._split_rule(r)
+                head, tail = BMC.split_rule(r)
                 assert z3.is_app_of(head, z3.Z3_OP_UNINTERPRETED)
 
                 level_rule_i = LinearBMC._mk_rule(head, rl_path, r_idx)
@@ -280,7 +277,7 @@ if __name__ == '__main__':
 
     solver = LinearBMC
     for r in rules:
-        _, tail = NonlinearBMC._split_rule(r)
+        _, tail = BMC.split_rule(r)
         if len(get_uninterpreted_calls(tail)) > 1:
             solver = NonlinearBMC
             break
