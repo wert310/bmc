@@ -214,65 +214,69 @@ class NonlinearBMC(BMC):
 
             print(f"Core #{iter_n}:", core)
 
+            lits_to_unroll = []
             # One unrolling step for everything
             for c_lit in core:
                 if z3.is_not(c_lit):
                     c_path = c_lit.arg(0).decl().name().split("#")[1]
                     pt_level = c_path.split('_')
                     if len(pt_level) == 1:
-                        lit = c_lit
-                        break
-            else:
+                        lits_to_unroll.append(c_lit)
+            if not lits_to_unroll:
                 while (lit := random.choice(core)).decl().name() == q_lit.decl().name(): pass
+                lits_to_unroll.append(lit)
 
-            assert z3.is_not(lit)
-            lit = lit.arg(0)
-            literals.remove(lit)
-            rl_call = self.calls[lit]
-            rl_path = self.paths[lit]
-            print("Expanding:", rl_call)
-            args = LinearBMC._mk_args(rl_call, rl_path)
-            r_conjs = [ exp == arg for exp, arg in args ]
+            # FIXME: move the unrolling into its own method
+            for lit in lits_to_unroll:
 
-            # Store unrolling depth in the path (FIXME: move into a method)
-            rl_path_parts = rl_path.split('_')
-            if len(rl_path_parts) == 1:
-                rl_path_rec = f'{rl_path}_1'
-            else:
-                rnd, lvl = rl_path_parts
-                rl_path_rec = f'{rnd}_{int(lvl)+1}'
+                assert z3.is_not(lit)
+                lit = lit.arg(0)
+                literals.remove(lit)
+                rl_call = self.calls[lit]
+                rl_path = self.paths[lit]
+                print("Expanding:", rl_call)
+                args = LinearBMC._mk_args(rl_call, rl_path)
+                r_conjs = [ exp == arg for exp, arg in args ]
 
-            rules = []
-            for r_idx, r in enumerate(rule_groups[rl_call.decl().name()]):
-                head, tail = BMC.split_rule(r)
-                assert z3.is_app_of(head, z3.Z3_OP_UNINTERPRETED)
+                # Store unrolling depth in the path (FIXME: move into a method)
+                rl_path_parts = rl_path.split('_')
+                if len(rl_path_parts) == 1:
+                    rl_path_rec = f'{rl_path}_1'
+                else:
+                    rnd, lvl = rl_path_parts
+                    rl_path_rec = f'{rnd}_{int(lvl)+1}'
 
-                level_rule_i = LinearBMC._mk_rule(head, rl_path, r_idx)
-                rules.append(level_rule_i)
+                rules = []
+                for r_idx, r in enumerate(rule_groups[rl_call.decl().name()]):
+                    head, tail = BMC.split_rule(r)
+                    assert z3.is_app_of(head, z3.Z3_OP_UNINTERPRETED)
 
-                # substitute vars
-                rule_vars = self._mk_vars(head, r, f'{rl_path}_{r_idx}')
-                rule_body = z3.substitute(tail, rule_vars)
-                rule_head = z3.substitute(head, rule_vars)
+                    level_rule_i = LinearBMC._mk_rule(head, rl_path, r_idx)
+                    rules.append(level_rule_i)
 
-                # Substitute args and make equalities
-                conjs = []
-                rule_args = LinearBMC._mk_args(rule_head, rl_path)
-                conjs.extend( [ exp == arg_sym for exp, arg_sym in rule_args ] )
-                rule_body = z3.substitute(rule_body, rule_args)
+                    # substitute vars
+                    rule_vars = self._mk_vars(head, r, f'{rl_path}_{r_idx}')
+                    rule_body = z3.substitute(tail, rule_vars)
+                    rule_head = z3.substitute(head, rule_vars)
 
-                for c in get_uninterpreted_calls(rule_body):
-                    rl_path_c = rl_path_rec
-                    if rl_call.decl().name() != c.decl().name():
-                        rl_path_c = random_string(12)
-                    args = [ exp == sym for exp,sym in LinearBMC._mk_args(c, rl_path_c) ]
-                    pred = self.mk_reachability_literal(c, rl_path_c)
-                    literals.add(pred)
-                    rule_body = z3.substitute(rule_body, [(c, z3.And(z3.And(*args), pred))])
+                    # Substitute args and make equalities
+                    conjs = []
+                    rule_args = LinearBMC._mk_args(rule_head, rl_path)
+                    conjs.extend( [ exp == arg_sym for exp, arg_sym in rule_args ] )
+                    rule_body = z3.substitute(rule_body, rule_args)
 
-                self._assert(z3.Implies(level_rule_i, z3.And(z3.And(*conjs), rule_body)))
+                    for c in get_uninterpreted_calls(rule_body):
+                        rl_path_c = rl_path_rec
+                        if rl_call.decl().name() != c.decl().name():
+                            rl_path_c = random_string(12)
+                        args = [ exp == sym for exp,sym in LinearBMC._mk_args(c, rl_path_c) ]
+                        pred = self.mk_reachability_literal(c, rl_path_c)
+                        literals.add(pred)
+                        rule_body = z3.substitute(rule_body, [(c, z3.And(z3.And(*args), pred))])
 
-            self._assert(z3.Implies(lit, z3.And(z3.And(*r_conjs), z3.Or(*rules))))
+                    self._assert(z3.Implies(level_rule_i, z3.And(z3.And(*conjs), rule_body)))
+
+                self._assert(z3.Implies(lit, z3.And(z3.And(*r_conjs), z3.Or(*rules))))
 
     def get_answer(self):
         assert self.__sat_res
