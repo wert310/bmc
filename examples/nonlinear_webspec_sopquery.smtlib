@@ -1,0 +1,2772 @@
+(declare-datatype optionInt ((SomeInt (@0SomeInt Int)) (NoneInt )))
+
+(declare-datatype Path ((slash ) (anypath (@0anypath Int))))
+
+(declare-datatype Domain
+ ((domain (@0domain Int)) (subdomain (@0subdomain Int) (@1subdomain Int))))
+
+(declare-datatype optionDomain
+ ((SomeDomain (@0SomeDomain Domain)) (NoneDomain )))
+
+(declare-datatype Protocol
+ ((ProtocolHTTP ) (ProtocolHTTPS ) (ProtocolData ) (ProtocolBlob )))
+
+(declare-datatype Origin
+ ((TupleOrigin
+   (@0TupleOrigin Protocol) (@1TupleOrigin optionDomain)
+   (@2TupleOrigin optionInt)) (OpaqueOrigin (@0OpaqueOrigin Int))))
+
+(declare-datatype URLPath
+ ((url_path_data (@0url_path_data Int) (@1url_path_data Int))
+  (url_path_blob (@0url_path_blob Origin) (@1url_path_blob Int))
+  (url_path_res (@0url_path_res Path))))
+
+(declare-datatype URL
+ ((Build_URL
+   (url_protocol Protocol) (url_host optionDomain) 
+   (url_port optionInt) (url_path URLPath))))
+
+(declare-datatype optionURL ((SomeURL (@0SomeURL URL)) (NoneURL )))
+
+(declare-datatype CookieName
+ ((NoPrefix (@0NoPrefix Int)) (Secure (@0Secure Int)) (Host (@0Host Int))))
+
+(declare-datatype CookieMapping
+ ((Build_CookieMapping (cm_name CookieName) (cm_value Int))))
+
+(declare-datatype optionCookieMapping
+ ((SomeCookieMapping (@0SomeCookieMapping CookieMapping))
+  (NoneCookieMapping )))
+
+(declare-datatype ArrayoptionCookieMapping
+ ((Build_ArrayoptionCookieMapping
+   (@0ArrayoptionCookieMapping optionCookieMapping)
+   (@1ArrayoptionCookieMapping optionCookieMapping)
+   (@2ArrayoptionCookieMapping optionCookieMapping)
+   (@3ArrayoptionCookieMapping optionCookieMapping)
+   (@4ArrayoptionCookieMapping optionCookieMapping)
+   (@defaultArrayoptionCookieMapping optionCookieMapping))))
+
+(declare-datatype optionOrigin
+ ((SomeOrigin (@0SomeOrigin Origin)) (NoneOrigin )))
+
+(declare-datatype RequestHeaders
+ ((Build_RequestHeaders
+   (rq_hd_origin optionOrigin) (rq_hd_cookie ArrayoptionCookieMapping)
+   (rq_hd_referer optionURL))))
+
+(declare-datatype RequestMethod
+ ((MethodGet ) (MethodPost ) (MethodPut ) (MethodDelete ) (MethodOptions )))
+
+(declare-datatype Request
+ ((Build_Request
+   (rq_method RequestMethod) (rq_url URL) (rq_headers RequestHeaders)
+   (rq_body optionInt))))
+
+(declare-var Request<0> Request)
+
+(declare-datatype DOMSelector ((DOMTopLevel ) (DOMIndex (@0DOMIndex Int))))
+
+(declare-datatype listInt
+ ((nilInt ) (consInt (@0consInt Int) (@1consInt listInt))))
+
+(declare-datatype NestedDOMPath
+ ((DOMPath (@0DOMPath listInt) (@1DOMPath DOMSelector))))
+
+(declare-datatype Frame ((Build_Frame (frame_src URL) (frame_window Int))))
+
+(declare-datatype SameSite ((SSStrict ) (SSLax ) (SSNone )))
+
+(declare-datatype SetCookie
+ ((Build_SetCookie
+   (sc_name CookieName) (sc_value Int) (sc_domain optionDomain)
+   (sc_reg_domain Domain) (sc_path Path) (sc_secure Bool) 
+   (sc_http_only Bool) (sc_same_site SameSite))))
+
+(declare-datatype ArrayoptionInt
+ ((Build_ArrayoptionInt
+   (@0ArrayoptionInt optionInt) (@1ArrayoptionInt optionInt)
+   (@2ArrayoptionInt optionInt) (@3ArrayoptionInt optionInt)
+   (@4ArrayoptionInt optionInt) (@defaultArrayoptionInt optionInt))))
+
+(declare-datatype Initiators
+ ((Build_Initiators (in_toplevel optionInt) (in_body ArrayoptionInt))))
+
+(declare-datatype HTMLElement
+ ((HTMLImage (@0HTMLImage URL)) (HTMLScript (@0HTMLScript URL))
+  (HTMLForm (@0HTMLForm RequestMethod) (@1HTMLForm URL))
+  (HTMLFrame (@0HTMLFrame URL))))
+
+(declare-datatype optionHTMLElement
+ ((SomeHTMLElement (@0SomeHTMLElement HTMLElement)) (NoneHTMLElement )))
+
+(declare-datatype ArrayoptionHTMLElement
+ ((Build_ArrayoptionHTMLElement
+   (@0ArrayoptionHTMLElement optionHTMLElement)
+   (@1ArrayoptionHTMLElement optionHTMLElement)
+   (@2ArrayoptionHTMLElement optionHTMLElement)
+   (@3ArrayoptionHTMLElement optionHTMLElement)
+   (@4ArrayoptionHTMLElement optionHTMLElement)
+   (@defaultArrayoptionHTMLElement optionHTMLElement))))
+
+(declare-datatype HTML
+ ((Build_HTML
+   (html_nonce Int) (html_head Int) (html_body ArrayoptionHTMLElement))))
+
+(declare-datatype Script
+ ((Build_Script (script_src URL) (script_nonce Int))))
+
+(declare-datatype Image ((Build_Image (image_src URL))))
+
+(declare-datatype ContentElement
+ ((ContentElementHTML (@0ContentElementHTML HTML))
+  (ContentElementImage (@0ContentElementImage Image))
+  (ContentElementScript (@0ContentElementScript Script))
+  (ContentElementFrame
+   (@0ContentElementFrame Frame) (@1ContentElementFrame HTML))))
+
+(declare-datatype Form
+ ((Build_Form (form_method RequestMethod) (form_action URL))))
+
+(declare-datatype DOMElement
+ ((DOMElementForm (@0DOMElementForm Form))
+  (DOMElementResource
+   (@0DOMElementResource URL) (@1DOMElementResource ContentElement))))
+
+(declare-datatype optionDOMElement
+ ((SomeDOMElement (@0SomeDOMElement DOMElement)) (NoneDOMElement )))
+
+(declare-datatype ArrayoptionDOMElement
+ ((Build_ArrayoptionDOMElement
+   (@0ArrayoptionDOMElement optionDOMElement)
+   (@1ArrayoptionDOMElement optionDOMElement)
+   (@2ArrayoptionDOMElement optionDOMElement)
+   (@3ArrayoptionDOMElement optionDOMElement)
+   (@4ArrayoptionDOMElement optionDOMElement)
+   (@defaultArrayoptionDOMElement optionDOMElement))))
+
+(declare-datatype DOM
+ ((Build_DOM (dm_nonce Int) (dm_head Int) (dm_body ArrayoptionDOMElement))))
+
+(declare-datatype ReferrerPolicy
+ ((ReferrerPolicyNoReferrer ) (ReferrerPolicyOrigin )))
+
+(declare-datatype optionReferrerPolicy
+ ((SomeReferrerPolicy (@0SomeReferrerPolicy ReferrerPolicy))
+  (NoneReferrerPolicy )))
+
+(declare-datatype optionoptionInt
+ ((SomeoptionInt (@0SomeoptionInt optionInt)) (NoneoptionInt )))
+
+(declare-datatype TrustedTypes
+ ((Build_TrustedTypes
+   (tt_policy optionoptionInt) (tt_require_for_script Bool))))
+
+(declare-datatype optionTrustedTypes
+ ((SomeTrustedTypes (@0SomeTrustedTypes TrustedTypes)) (NoneTrustedTypes )))
+
+(declare-datatype optionPath ((SomePath (@0SomePath Path)) (NonePath )))
+
+(declare-datatype optionProtocol
+ ((SomeProtocol (@0SomeProtocol Protocol)) (NoneProtocol )))
+
+(declare-datatype CSPSrc
+ ((CSPSrcNone ) (CSPSrcSelf ) (CSPSrcScheme (@0CSPSrcScheme Protocol))
+  (CSPSrcSource
+   (@0CSPSrcSource optionProtocol) (@1CSPSrcSource optionoptionInt)
+   (@2CSPSrcSource Int) (@3CSPSrcSource optionInt)
+   (@4CSPSrcSource optionPath))))
+
+(declare-datatype optionCSPSrc
+ ((SomeCSPSrc (@0SomeCSPSrc CSPSrc)) (NoneCSPSrc )))
+
+(declare-datatype CSP
+ ((Build_CSP
+   (csp_script_src optionCSPSrc) (csp_trusted_types optionTrustedTypes))))
+
+(declare-datatype optionCSP ((SomeCSP (@0SomeCSP CSP)) (NoneCSP )))
+
+(declare-datatype optionSetCookie
+ ((SomeSetCookie (@0SomeSetCookie SetCookie)) (NoneSetCookie )))
+
+(declare-datatype ContentType
+ ((ContentTypeHTML ) (ContentTypeImage ) (ContentTypeScript )))
+
+(declare-datatype optionContentType
+ ((SomeContentType (@0SomeContentType ContentType)) (NoneContentType )))
+
+(declare-datatype ResponseHeaders
+ ((Build_ResponseHeaders
+   (rp_hd_content_type optionContentType) (rp_hd_set_cookie optionSetCookie)
+   (rp_hd_access_control_allow_origin optionOrigin)
+   (rp_hd_location optionURL) (rp_hd_csp optionCSP)
+   (rp_hd_referrer_policy optionReferrerPolicy))))
+
+(declare-datatype Document
+ ((Build_Document
+   (dc_version Int) (dc_nonce Int) (dc_headers ResponseHeaders)
+   (dc_html HTML) (dc_dom DOM) (dc_init Initiators))))
+
+(declare-datatype Window
+ ((Build_Window
+   (wd_nonce Int) (wd_parent optionInt) (wd_location URL)
+   (wd_document_domain optionDomain) (wd_document Document))))
+
+(declare-datatype optionContentElement
+ ((SomeContentElement (@0SomeContentElement ContentElement))
+  (NoneContentElement )))
+
+(declare-datatype ResponseCode
+ ((ResponseOk ) (ResponseNoContent ) (ResponseFound )
+  (ResponseTemporaryRedirect )))
+
+(declare-datatype Response
+ ((Build_Response
+   (rp_url URL) (rp_code ResponseCode) (rp_headers ResponseHeaders)
+   (rp_content optionContentElement))))
+
+(declare-datatype Emitter
+ ((EmitterClient )
+  (EmitterScript (@0EmitterScript NestedDOMPath) (@1EmitterScript Script))
+  (EmitterForm (@0EmitterForm NestedDOMPath) (@1EmitterForm Form))
+  (EmitterWorker )
+  (EmitterCORSPreflight
+   (@0EmitterCORSPreflight Int) (@1EmitterCORSPreflight Request))))
+
+(declare-datatype Event
+ ((EvInit )
+  (EvRequest (@0EvRequest Emitter) (@1EvRequest Request) (@2EvRequest Int))
+  (EvResponse (@0EvResponse Response) (@1EvResponse Int))
+  (EvDOMUpdate (@0EvDOMUpdate NestedDOMPath))
+  (EvScriptUpdateHTML
+   (@0EvScriptUpdateHTML NestedDOMPath) (@1EvScriptUpdateHTML NestedDOMPath)
+   (@2EvScriptUpdateHTML Window))
+  (EvScriptDomainRelaxation
+   (@0EvScriptDomainRelaxation NestedDOMPath)
+   (@1EvScriptDomainRelaxation Domain))
+  (EvWorkerCacheMatch (@0EvWorkerCacheMatch Int))
+  (EvWorkerUpdateCache
+   (@0EvWorkerUpdateCache Int) (@1EvWorkerUpdateCache Int))
+  (EvScriptUpdateCache
+   (@0EvScriptUpdateCache NestedDOMPath) (@1EvScriptUpdateCache Int)
+   (@2EvScriptUpdateCache optionInt))
+  (EvScriptSetCookie
+   (@0EvScriptSetCookie NestedDOMPath) (@1EvScriptSetCookie NestedDOMPath)
+   (@2EvScriptSetCookie Int) (@3EvScriptSetCookie SetCookie))
+  (EvScriptNavigateFrame
+   (@0EvScriptNavigateFrame NestedDOMPath)
+   (@1EvScriptNavigateFrame NestedDOMPath) (@2EvScriptNavigateFrame Frame)
+   (@3EvScriptNavigateFrame URL))
+  (EvScriptPostMessage
+   (@0EvScriptPostMessage NestedDOMPath)
+   (@1EvScriptPostMessage NestedDOMPath) (@2EvScriptPostMessage optionURL))
+  (EvScriptCreateBlobUrl
+   (@0EvScriptCreateBlobUrl NestedDOMPath) (@1EvScriptCreateBlobUrl URL))
+  (EvScriptStorageSetItem
+   (@0EvScriptStorageSetItem NestedDOMPath) (@1EvScriptStorageSetItem Origin)
+   (@2EvScriptStorageSetItem Int) (@3EvScriptStorageSetItem Int))))
+
+(declare-datatype listEvent
+ ((nilEvent ) (consEvent (@0consEvent Event) (@1consEvent listEvent))))
+
+(declare-var listEvent<0> listEvent)
+
+(declare-rel all_list (Request listEvent))
+
+(rule (=> (= listEvent<0> nilEvent) (all_list Request<0> listEvent<0>))
+ AllList_empty)
+
+(declare-var listEvent<1> listEvent)
+
+(declare-var Event<0> Event)
+
+(rule
+ (=>
+  (and (= listEvent<1> (consEvent Event<0> listEvent<0>))
+   (match Event<0>
+    ((EvInit true)
+     ((EvRequest Emitter<0> Request<1> Int<8>)
+      (match Emitter<0>
+       ((EmitterClient true)
+        ((EmitterScript NestedDOMPath<14> Script<0>) true)
+        ((EmitterForm NestedDOMPath<13> Form<0>) true) 
+        (EmitterWorker true)
+        ((EmitterCORSPreflight Int<9> Request<2>)
+         (not (= Request<2> Request<0>))))))
+     ((EvResponse Response<0> Int<7>) true)
+     ((EvDOMUpdate NestedDOMPath<12>) true)
+     ((EvScriptUpdateHTML NestedDOMPath<11> NestedDOMPath<10> Window<0>)
+      true) ((EvScriptDomainRelaxation NestedDOMPath<9> Domain<0>) true)
+     ((EvWorkerCacheMatch Int<6>) true)
+     ((EvWorkerUpdateCache Int<5> Int<4>) true)
+     ((EvScriptUpdateCache NestedDOMPath<8> Int<3> optionInt<0>) true)
+     ((EvScriptSetCookie NestedDOMPath<7> NestedDOMPath<6> Int<2>
+       SetCookie<0>) true)
+     ((EvScriptNavigateFrame NestedDOMPath<5> NestedDOMPath<4> Frame<0>
+       URL<1>) true)
+     ((EvScriptPostMessage NestedDOMPath<3> NestedDOMPath<2> optionURL<0>)
+      true) ((EvScriptCreateBlobUrl NestedDOMPath<1> URL<0>) true)
+     ((EvScriptStorageSetItem NestedDOMPath<0> Origin<0> Int<1> Int<0>) true)))
+   (all_list Request<0> listEvent<0>)) (all_list Request<0> listEvent<1>))
+ AllList_rec)
+
+(declare-var NestedDOMPath<0> NestedDOMPath)
+
+(declare-var DOMSelector<0> DOMSelector)
+
+(declare-var Window<1> Window)
+
+(declare-datatype Config
+ ((Build_Config
+   (c_forbidden_headers Bool) (c_restrict_tt_to_secure_contexts Bool)
+   (c_tt_strict_realm_check Bool) (c_redirect_preflight_requests Bool)
+   (c_origin_header_on_cross_origin_redirect Bool)
+   (c_earlyhtml5_form_methods Bool) (c_script_update_cache Bool)
+   (c_worker_allow_synthetic_responses Bool)
+   (c_csp_inherit_local_from_initiator Bool)
+   (c_csp_inherit_blob_from_creator Bool) (c_domain_relaxation Bool)
+   (c_origin_wide_csp Bool))))
+
+(declare-datatype prodOriginoptionCSP
+ ((pairOriginoptionCSP
+   (@0pairOriginoptionCSP Origin) (@1pairOriginoptionCSP optionCSP))))
+
+(declare-datatype ArrayprodOriginoptionCSP
+ ((Build_ArrayprodOriginoptionCSP
+   (@0ArrayprodOriginoptionCSP prodOriginoptionCSP)
+   (@1ArrayprodOriginoptionCSP prodOriginoptionCSP)
+   (@2ArrayprodOriginoptionCSP prodOriginoptionCSP)
+   (@3ArrayprodOriginoptionCSP prodOriginoptionCSP)
+   (@4ArrayprodOriginoptionCSP prodOriginoptionCSP)
+   (@defaultArrayprodOriginoptionCSP prodOriginoptionCSP))))
+
+(declare-datatype ArrayContentElement
+ ((Build_ArrayContentElement
+   (@0ArrayContentElement ContentElement)
+   (@1ArrayContentElement ContentElement)
+   (@2ArrayContentElement ContentElement)
+   (@3ArrayContentElement ContentElement)
+   (@4ArrayContentElement ContentElement)
+   (@defaultArrayContentElement ContentElement))))
+
+(declare-datatype ArrayWindow
+ ((Build_ArrayWindow
+   (@0ArrayWindow Window) (@1ArrayWindow Window) (@2ArrayWindow Window)
+   (@3ArrayWindow Window) (@4ArrayWindow Window) (@defaultArrayWindow Window))))
+
+(declare-datatype ArrayEmitter
+ ((Build_ArrayEmitter
+   (@0ArrayEmitter Emitter) (@1ArrayEmitter Emitter) 
+   (@2ArrayEmitter Emitter) (@3ArrayEmitter Emitter) 
+   (@4ArrayEmitter Emitter) (@defaultArrayEmitter Emitter))))
+
+(declare-datatype ArrayInt
+ ((Build_ArrayInt
+   (@0ArrayInt Int) (@1ArrayInt Int) (@2ArrayInt Int) 
+   (@3ArrayInt Int) (@4ArrayInt Int) (@defaultArrayInt Int))))
+
+(declare-datatype ArrayResponse
+ ((Build_ArrayResponse
+   (@0ArrayResponse Response) (@1ArrayResponse Response)
+   (@2ArrayResponse Response) (@3ArrayResponse Response)
+   (@4ArrayResponse Response) (@defaultArrayResponse Response))))
+
+(declare-datatype ArrayRequest
+ ((Build_ArrayRequest
+   (@0ArrayRequest Request) (@1ArrayRequest Request) 
+   (@2ArrayRequest Request) (@3ArrayRequest Request) 
+   (@4ArrayRequest Request) (@defaultArrayRequest Request))))
+
+(declare-datatype Global
+ ((Build_Global
+   (requests ArrayRequest) (responses ArrayResponse)
+   (server_responses ArrayInt) (emitters ArrayEmitter) 
+   (windows ArrayWindow) (data_urls ArrayContentElement)
+   (origin_csp ArrayprodOriginoptionCSP) (config Config))))
+
+(declare-var Global<0> Global)
+
+(declare-var Window<0> Window)
+
+(declare-rel window_ctx_of_dom_path_rec (Global Window Window NestedDOMPath))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt DOMSelector<0>))
+   (= Window<0> Window<1>))
+  (window_ctx_of_dom_path_rec Global<0> Window<0> Window<1> NestedDOMPath<0>))
+ Window_ctx_pt_base)
+
+(declare-var Int<0> Int)
+
+(declare-var Window<2> Window)
+
+(declare-var Frame<0> Frame)
+
+(declare-var listInt<0> listInt)
+
+(declare-var HTML<0> HTML)
+
+(define-fun readoptionDOMElement ((a ArrayoptionDOMElement) (i Int))
+ optionDOMElement
+ (ite (= i 0) (@0ArrayoptionDOMElement a)
+  (ite (= i 1) (@1ArrayoptionDOMElement a)
+   (ite (= i 2) (@2ArrayoptionDOMElement a)
+    (ite (= i 3) (@3ArrayoptionDOMElement a)
+     (ite (= i 4) (@4ArrayoptionDOMElement a)
+      (@defaultArrayoptionDOMElement a)))))))
+
+(define-fun is_frame_at_page_index
+ ((DOM<1> DOM) (Int<2> Int) (Frame<2> Frame) (HTML<2> HTML)) Bool
+ (match (readoptionDOMElement (dm_body DOM<1>) Int<2>)
+  (((SomeDOMElement DOMElement<0>)
+    (match DOMElement<0>
+     (((DOMElementForm Form<0>) false)
+      ((DOMElementResource URL<0> ContentElement<0>)
+       (match ContentElement<0>
+        (((ContentElementHTML HTML<4>) false)
+         ((ContentElementImage Image<0>) false)
+         ((ContentElementScript Script<0>) false)
+         ((ContentElementFrame Frame<3> HTML<3>)
+          (and (= Frame<3> Frame<2>) (= HTML<3> HTML<2>)))))))))
+   (NoneDOMElement false))))
+
+(define-fun readWindow ((a ArrayWindow) (i Int)) Window
+ (ite (= i 0) (@0ArrayWindow a)
+  (ite (= i 1) (@1ArrayWindow a)
+   (ite (= i 2) (@2ArrayWindow a)
+    (ite (= i 3) (@3ArrayWindow a)
+     (ite (= i 4) (@4ArrayWindow a) (@defaultArrayWindow a)))))))
+
+(define-fun is_frame_window_at_page_index
+ ((Global<1> Global) (DOM<0> DOM) (Int<1> Int) (Frame<1> Frame)
+ (HTML<1> HTML) (Window<3> Window)) Bool
+ (and (is_frame_at_page_index DOM<0> Int<1> Frame<1> HTML<1>)
+  (= (readWindow (windows Global<1>) (frame_window Frame<1>)) Window<3>)))
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<0> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<2>))
+    Int<0> Frame<0> HTML<0> Window<1>)
+   (window_ctx_of_dom_path_rec Global<0> Window<0> Window<1>
+    (DOMPath listInt<0> DOMSelector<0>)))
+  (window_ctx_of_dom_path_rec Global<0> Window<0> Window<2> NestedDOMPath<0>))
+ Window_ctx_pt_rec)
+
+(declare-var Script<0> Script)
+
+(define-fun is_script_at_page_index
+ ((DOM<0> DOM) (Int<1> Int) (Script<1> Script)) Bool
+ (match (readoptionDOMElement (dm_body DOM<0>) Int<1>)
+  (((SomeDOMElement DOMElement<0>)
+    (match DOMElement<0>
+     (((DOMElementForm Form<0>) false)
+      ((DOMElementResource URL<0> ContentElement<0>)
+       (match ContentElement<0>
+        (((ContentElementHTML HTML<1>) false)
+         ((ContentElementImage Image<0>) false)
+         ((ContentElementScript Script<2>) (= Script<2> Script<1>))
+         ((ContentElementFrame Frame<0> HTML<0>) false)))))))
+   (NoneDOMElement false))))
+
+(declare-rel is_script_in_dom_path (Global Window NestedDOMPath Script
+ Window))
+
+(rule
+ (=>
+  (and
+   (window_ctx_of_dom_path_rec Global<0> Window<1> Window<0>
+    NestedDOMPath<0>)
+   (= NestedDOMPath<0> (DOMPath listInt<0> (DOMIndex Int<0>)))
+   (is_script_at_page_index (dc_dom (wd_document Window<1>)) Int<0>
+    Script<0>))
+  (is_script_in_dom_path Global<0> Window<0> NestedDOMPath<0> Script<0>
+   Window<1>)) Script_in_dom_pt)
+
+(declare-var Form<0> Form)
+
+(define-fun is_form_at_page_index ((DOM<0> DOM) (Int<1> Int) (Form<1> Form))
+ Bool
+ (match (readoptionDOMElement (dm_body DOM<0>) Int<1>)
+  (((SomeDOMElement DOMElement<0>)
+    (match DOMElement<0>
+     (((DOMElementForm Form<2>) (= Form<2> Form<1>))
+      ((DOMElementResource URL<0> ContentElement<0>) false))))
+   (NoneDOMElement false))))
+
+(declare-rel is_form_in_dom_path (Global Window NestedDOMPath Form Window))
+
+(rule
+ (=>
+  (and
+   (window_ctx_of_dom_path_rec Global<0> Window<1> Window<0>
+    NestedDOMPath<0>)
+   (= NestedDOMPath<0> (DOMPath listInt<0> (DOMIndex Int<0>)))
+   (is_form_at_page_index (dc_dom (wd_document Window<1>)) Int<0> Form<0>))
+  (is_form_in_dom_path Global<0> Window<0> NestedDOMPath<0> Form<0>
+   Window<1>)) Form_in_dom_pt)
+
+(declare-var Emitter<0> Emitter)
+
+(define-fun readEmitter ((a ArrayEmitter) (i Int)) Emitter
+ (ite (= i 0) (@0ArrayEmitter a)
+  (ite (= i 1) (@1ArrayEmitter a)
+   (ite (= i 2) (@2ArrayEmitter a)
+    (ite (= i 3) (@3ArrayEmitter a)
+     (ite (= i 4) (@4ArrayEmitter a) (@defaultArrayEmitter a)))))))
+
+(declare-rel is_emitter_window_context (Global Emitter Window Window))
+
+(rule
+ (=>
+  (match Emitter<0>
+   ((EmitterClient (= Window<0> Window<1>))
+    ((EmitterScript NestedDOMPath<3> Script<1>)
+     (is_script_in_dom_path Global<0> Window<1> NestedDOMPath<3> Script<1>
+      Window<0>))
+    ((EmitterForm NestedDOMPath<2> Form<1>)
+     (is_form_in_dom_path Global<0> Window<1> NestedDOMPath<2> Form<1>
+      Window<0>)) (EmitterWorker (= Window<0> Window<1>))
+    ((EmitterCORSPreflight Int<0> Request<0>)
+     (match (readEmitter (emitters Global<0>) Int<0>)
+      ((EmitterClient false)
+       ((EmitterScript NestedDOMPath<1> Script<0>)
+        (is_script_in_dom_path Global<0> Window<1> NestedDOMPath<1> Script<0>
+         Window<0>)) ((EmitterForm NestedDOMPath<0> Form<0>) false)
+       (EmitterWorker false) ((EmitterCORSPreflight Int<1> Request<1>) false))))))
+  (is_emitter_window_context Global<0> Emitter<0> Window<1> Window<0>))
+ Emitter_window_contex)
+
+(declare-datatype prodEmitterInt
+ ((pairEmitterInt (@0pairEmitterInt Emitter) (@1pairEmitterInt Int))))
+
+(declare-datatype prodprodEmitterIntInt
+ ((pairprodEmitterIntInt
+   (@0pairprodEmitterIntInt prodEmitterInt) (@1pairprodEmitterIntInt Int))))
+
+(declare-datatype optionprodprodEmitterIntInt
+ ((SomeprodprodEmitterIntInt
+   (@0SomeprodprodEmitterIntInt prodprodEmitterIntInt))
+  (NoneprodprodEmitterIntInt )))
+
+(declare-datatype ArrayoptionprodprodEmitterIntInt
+ ((Build_ArrayoptionprodprodEmitterIntInt
+   (@0ArrayoptionprodprodEmitterIntInt optionprodprodEmitterIntInt)
+   (@1ArrayoptionprodprodEmitterIntInt optionprodprodEmitterIntInt)
+   (@2ArrayoptionprodprodEmitterIntInt optionprodprodEmitterIntInt)
+   (@3ArrayoptionprodprodEmitterIntInt optionprodprodEmitterIntInt)
+   (@4ArrayoptionprodprodEmitterIntInt optionprodprodEmitterIntInt)
+   (@defaultArrayoptionprodprodEmitterIntInt optionprodprodEmitterIntInt))))
+
+(declare-datatype optionResponse
+ ((SomeResponse (@0SomeResponse Response)) (NoneResponse )))
+
+(declare-datatype FetchEngine
+ ((Build_FetchEngine
+   (ft_version Int) (ft_emitter Emitter) (ft_request Request)
+   (ft_correlator Int) (ft_response optionResponse)
+   (ft_history ArrayoptionprodprodEmitterIntInt))))
+
+(declare-var FetchEngine<0> FetchEngine)
+
+(declare-var Response<0> Response)
+
+(declare-var Int<1> Int)
+
+(declare-datatype Blob
+ ((Build_Blob
+   (blob_url URL) (blob_celt ContentElement) (blob_origin Origin)
+   (blob_csp optionCSP))))
+
+(declare-datatype optionBlob ((SomeBlob (@0SomeBlob Blob)) (NoneBlob )))
+
+(declare-datatype ArrayoptionBlob
+ ((Build_ArrayoptionBlob
+   (@0ArrayoptionBlob optionBlob) (@1ArrayoptionBlob optionBlob)
+   (@2ArrayoptionBlob optionBlob) (@3ArrayoptionBlob optionBlob)
+   (@4ArrayoptionBlob optionBlob) (@defaultArrayoptionBlob optionBlob))))
+
+(declare-var ArrayoptionBlob<0> ArrayoptionBlob)
+
+(define-fun content_type_of_element ((ContentElement<1> ContentElement))
+ ContentType
+ (match ContentElement<1>
+  (((ContentElementHTML HTML<1>) ContentTypeHTML)
+   ((ContentElementImage Image<0>) ContentTypeImage)
+   ((ContentElementScript Script<1>) ContentTypeScript)
+   ((ContentElementFrame Frame<0> HTML<0>) ContentTypeHTML))))
+
+(define-fun is_valid_response_content ((Response<2> Response)) Bool
+ (match (rp_hd_content_type (rp_headers Response<2>))
+  (((SomeContentType ContentType<0>)
+    (match (rp_content Response<2>)
+     (((SomeContentElement ContentElement<0>)
+       (and (= (content_type_of_element ContentElement<0>) ContentType<0>)
+        (match ContentElement<0>
+         (((ContentElementHTML HTML<3>) true)
+          ((ContentElementImage Image<1>)
+           (= (image_src Image<1>) (rp_url Response<2>)))
+          ((ContentElementScript Script<2>)
+           (= (script_src Script<2>) (rp_url Response<2>)))
+          ((ContentElementFrame Frame<1> HTML<2>)
+           (= (frame_src Frame<1>) (rp_url Response<2>)))))))
+      (NoneContentElement true)))) (NoneContentType true))))
+
+(define-fun readoptionHTMLElement ((a ArrayoptionHTMLElement) (i Int))
+ optionHTMLElement
+ (ite (= i 0) (@0ArrayoptionHTMLElement a)
+  (ite (= i 1) (@1ArrayoptionHTMLElement a)
+   (ite (= i 2) (@2ArrayoptionHTMLElement a)
+    (ite (= i 3) (@3ArrayoptionHTMLElement a)
+     (ite (= i 4) (@4ArrayoptionHTMLElement a)
+      (@defaultArrayoptionHTMLElement a)))))))
+
+(define-fun is_valid_content_html_element
+ ((ContentElement<3> ContentElement) (HTMLElement<1> HTMLElement)) Bool
+ (match ContentElement<3>
+  (((ContentElementHTML HTML<5>) false)
+   ((ContentElementImage Image<2>)
+    (= HTMLElement<1> (HTMLImage (image_src Image<2>))))
+   ((ContentElementScript Script<3>)
+    (= HTMLElement<1> (HTMLScript (script_src Script<3>))))
+   ((ContentElementFrame Frame<2> HTML<4>)
+    (= HTMLElement<1> (HTMLFrame (frame_src Frame<2>)))))))
+
+(define-fun readoptionInt ((a ArrayoptionInt) (i Int)) optionInt
+ (ite (= i 0) (@0ArrayoptionInt a)
+  (ite (= i 1) (@1ArrayoptionInt a)
+   (ite (= i 2) (@2ArrayoptionInt a)
+    (ite (= i 3) (@3ArrayoptionInt a)
+     (ite (= i 4) (@4ArrayoptionInt a) (@defaultArrayoptionInt a)))))))
+
+(define-fun readoptionBlob ((a ArrayoptionBlob) (i Int)) optionBlob
+ (ite (= i 0) (@0ArrayoptionBlob a)
+  (ite (= i 1) (@1ArrayoptionBlob a)
+   (ite (= i 2) (@2ArrayoptionBlob a)
+    (ite (= i 3) (@3ArrayoptionBlob a)
+     (ite (= i 4) (@4ArrayoptionBlob a) (@defaultArrayoptionBlob a)))))))
+
+(define-fun constoptionInt ((e optionInt)) ArrayoptionInt
+ (Build_ArrayoptionInt e e e e e e))
+
+(define-fun empty_initiators () Initiators
+ (Build_Initiators NoneInt (constoptionInt NoneInt)))
+
+(define-fun render_static_element ((optionHTMLElement<0> optionHTMLElement))
+ optionDOMElement
+ (match optionHTMLElement<0>
+  (((SomeHTMLElement HTMLElement<2>)
+    (match HTMLElement<2>
+     (((HTMLImage URL<5>) NoneDOMElement)
+      ((HTMLScript URL<4>) NoneDOMElement)
+      ((HTMLForm RequestMethod<0> URL<3>)
+       (SomeDOMElement (DOMElementForm (Build_Form RequestMethod<0> URL<3>))))
+      ((HTMLFrame URL<2>) NoneDOMElement)))) (NoneHTMLElement NoneDOMElement))))
+
+(define-fun <closure11>optionHTMLElementoptionDOMElement
+ ((T<0> optionHTMLElement)) optionDOMElement (render_static_element T<0>))
+
+(define-fun <map><closure11>optionHTMLElementoptionDOMElement
+ ((a ArrayoptionHTMLElement)) ArrayoptionDOMElement
+ (Build_ArrayoptionDOMElement
+  (<closure11>optionHTMLElementoptionDOMElement (@0ArrayoptionHTMLElement a))
+  (<closure11>optionHTMLElementoptionDOMElement (@1ArrayoptionHTMLElement a))
+  (<closure11>optionHTMLElementoptionDOMElement (@2ArrayoptionHTMLElement a))
+  (<closure11>optionHTMLElementoptionDOMElement (@3ArrayoptionHTMLElement a))
+  (<closure11>optionHTMLElementoptionDOMElement (@4ArrayoptionHTMLElement a))
+  (<closure11>optionHTMLElementoptionDOMElement
+   (@defaultArrayoptionHTMLElement a))))
+
+(define-fun build_toplevel_window
+ ((Int<18> Int) (optionInt<0> optionInt) (FetchEngine<2> FetchEngine)
+ (Response<3> Response) (HTML<7> HTML)) Window
+ (Build_Window (ft_correlator FetchEngine<2>) optionInt<0>
+  (rp_url Response<3>) NoneDomain
+  (Build_Document (+ Int<18> 1) (ft_correlator FetchEngine<2>)
+   (rp_headers Response<3>) HTML<7>
+   (Build_DOM (ft_correlator FetchEngine<2>) 0
+    (<map><closure11>optionHTMLElementoptionDOMElement (html_body HTML<7>)))
+   empty_initiators)))
+
+(define-fun origin_of_url ((URL<26> URL)) optionOrigin
+ (match (url_protocol URL<26>)
+  ((ProtocolHTTP
+    (SomeOrigin
+     (TupleOrigin (url_protocol URL<26>) (url_host URL<26>)
+      (url_port URL<26>))))
+   (ProtocolHTTPS
+    (SomeOrigin
+     (TupleOrigin (url_protocol URL<26>) (url_host URL<26>)
+      (url_port URL<26>))))
+   (ProtocolData
+    (match (url_path URL<26>)
+     (((url_path_data Int<24> Int<23>) (SomeOrigin (OpaqueOrigin Int<24>)))
+      ((url_path_blob Origin<3> Int<22>) NoneOrigin)
+      ((url_path_res Path<3>) NoneOrigin))))
+   (ProtocolBlob
+    (match (url_path URL<26>)
+     (((url_path_data Int<21> Int<20>) NoneOrigin)
+      ((url_path_blob Origin<2> Int<19>) (SomeOrigin Origin<2>))
+      ((url_path_res Path<2>) NoneOrigin)))))))
+
+(define-fun csp_src_match
+ ((CSPSrc<1> CSPSrc) (Origin<5> Origin) (URL<27> URL)) Bool
+ (match CSPSrc<1>
+  ((CSPSrcNone false)
+   (CSPSrcSelf (= (SomeOrigin Origin<5>) (origin_of_url URL<27>)))
+   ((CSPSrcScheme Protocol<1>) (= (url_protocol URL<27>) Protocol<1>))
+   ((CSPSrcSource optionProtocol<0> optionoptionInt<0> Int<25> optionInt<1>
+     optionPath<0>)
+    (and
+     (match optionProtocol<0>
+      (((SomeProtocol Protocol<0>) (= (url_protocol URL<27>) Protocol<0>))
+       (NoneProtocol true)))
+     (match optionoptionInt<0>
+      (((SomeoptionInt optionInt<2>)
+        (match optionInt<2>
+         (((SomeInt Int<32>)
+           (match (url_host URL<27>)
+            (((SomeDomain Domain<2>)
+              (match Domain<2>
+               (((domain Int<35>) false)
+                ((subdomain Int<34> Int<33>) (= Int<34> Int<32>)))))
+             (NoneDomain false))))
+          (NoneInt
+           (match (url_host URL<27>)
+            (((SomeDomain Domain<1>)
+              (match Domain<1>
+               (((domain Int<31>) false) ((subdomain Int<30> Int<29>) true))))
+             (NoneDomain false)))))))
+       (NoneoptionInt
+        (match (url_host URL<27>)
+         (((SomeDomain Domain<0>)
+           (match Domain<0>
+            (((domain Int<28>) true) ((subdomain Int<27> Int<26>) false))))
+          (NoneDomain false))))))
+     (match (url_host URL<27>)
+      (((SomeDomain Domain<3>)
+        (match Domain<3>
+         (((domain Int<38>) (= Int<38> Int<25>))
+          ((subdomain Int<37> Int<36>) (= Int<36> Int<25>)))))
+       (NoneDomain false)))
+     (match optionInt<1>
+      (((SomeInt Int<39>) (= (url_port URL<27>) (SomeInt Int<39>)))
+       (NoneInt true)))
+     (match optionPath<0>
+      (((SomePath Path<4>)
+        (match (url_path URL<27>)
+         (((url_path_data Int<42> Int<41>) false)
+          ((url_path_blob Origin<6> Int<40>) false)
+          ((url_path_res Path<5>) (= Path<5> Path<4>))))) 
+       (NonePath true))))))))
+
+(define-fun writeoptionDOMElement
+ ((a ArrayoptionDOMElement) (i Int) (e optionDOMElement))
+ ArrayoptionDOMElement
+ (ite (= i 0)
+  (Build_ArrayoptionDOMElement e (@1ArrayoptionDOMElement a)
+   (@2ArrayoptionDOMElement a) (@3ArrayoptionDOMElement a)
+   (@4ArrayoptionDOMElement a) (@defaultArrayoptionDOMElement a))
+  (ite (= i 1)
+   (Build_ArrayoptionDOMElement (@0ArrayoptionDOMElement a) e
+    (@2ArrayoptionDOMElement a) (@3ArrayoptionDOMElement a)
+    (@4ArrayoptionDOMElement a) (@defaultArrayoptionDOMElement a))
+   (ite (= i 2)
+    (Build_ArrayoptionDOMElement (@0ArrayoptionDOMElement a)
+     (@1ArrayoptionDOMElement a) e (@3ArrayoptionDOMElement a)
+     (@4ArrayoptionDOMElement a) (@defaultArrayoptionDOMElement a))
+    (ite (= i 3)
+     (Build_ArrayoptionDOMElement (@0ArrayoptionDOMElement a)
+      (@1ArrayoptionDOMElement a) (@2ArrayoptionDOMElement a) e
+      (@4ArrayoptionDOMElement a) (@defaultArrayoptionDOMElement a))
+     (ite (= i 4)
+      (Build_ArrayoptionDOMElement (@0ArrayoptionDOMElement a)
+       (@1ArrayoptionDOMElement a) (@2ArrayoptionDOMElement a)
+       (@3ArrayoptionDOMElement a) e (@defaultArrayoptionDOMElement a)) a))))))
+
+(define-fun update_page_element_at_idx
+ ((Int<50> Int) (Window<4> Window) (URL<29> URL) (Int<49> Int)
+ (ContentElement<4> ContentElement)) Window
+ (Build_Window (wd_nonce Window<4>) (wd_parent Window<4>)
+  (wd_location Window<4>) (wd_document_domain Window<4>)
+  (Build_Document (+ Int<50> 1) (dc_nonce (wd_document Window<4>))
+   (dc_headers (wd_document Window<4>)) (dc_html (wd_document Window<4>))
+   (Build_DOM (dm_nonce (dc_dom (wd_document Window<4>)))
+    (dm_head (dc_dom (wd_document Window<4>)))
+    (writeoptionDOMElement (dm_body (dc_dom (wd_document Window<4>))) Int<49>
+     (SomeDOMElement (DOMElementResource URL<29> ContentElement<4>))))
+   (dc_init (wd_document Window<4>)))))
+
+(define-fun render_window_dom_path_on_response
+ ((Global<1> Global) (Int<3> Int) (FetchEngine<1> FetchEngine)
+ (Response<1> Response) (DOMSelector<1> DOMSelector) 
+ (Window<3> Window) (Window<2> Window) (Int<2> Int)
+ (ArrayoptionBlob<1> ArrayoptionBlob)) Bool
+ (and
+  (match (ft_emitter FetchEngine<1>)
+   ((EmitterClient true)
+    ((EmitterScript NestedDOMPath<2> Script<0>)
+     (not (= DOMSelector<1> DOMTopLevel)))
+    ((EmitterForm NestedDOMPath<1> Form<0>) (= DOMSelector<1> DOMTopLevel))
+    (EmitterWorker false) ((EmitterCORSPreflight Int<4> Request<0>) false)))
+  (= (ft_response FetchEngine<1>) (SomeResponse Response<1>))
+  (match (rp_code Response<1>)
+   ((ResponseOk true) (ResponseNoContent false)
+    (ResponseFound
+     (match (rp_hd_location (rp_headers Response<1>))
+      (((SomeURL URL<1>) false) (NoneURL true))))
+    (ResponseTemporaryRedirect
+     (match (rp_hd_location (rp_headers Response<1>))
+      (((SomeURL URL<0>) false) (NoneURL true))))))
+  (is_valid_response_content Response<1>)
+  (= (rp_code Response<1>) ResponseOk)
+  (match (rp_content Response<1>)
+   (((SomeContentElement ContentElement<2>)
+     (and
+      (not (= (rp_hd_content_type (rp_headers Response<1>)) NoneContentType))
+      (match DOMSelector<1>
+       ((DOMTopLevel
+         (match ContentElement<2>
+          (((ContentElementHTML HTML<10>)
+            (and
+             (match (url_protocol (rp_url Response<1>))
+              ((ProtocolHTTP true) (ProtocolHTTPS true)
+               (ProtocolData
+                (= (rp_hd_csp (rp_headers Response<1>)) NoneCSP))
+               (ProtocolBlob
+                (= (rp_hd_csp (rp_headers Response<1>)) NoneCSP))))
+             (= Window<2>
+              (build_toplevel_window Int<3> NoneInt FetchEngine<1>
+               Response<1> HTML<10>))))
+           ((ContentElementImage Image<4>) false)
+           ((ContentElementScript Script<5>) false)
+           ((ContentElementFrame Frame<4> HTML<9>) false))))
+        ((DOMIndex Int<5>)
+         (match
+          (readoptionHTMLElement
+           (html_body (dc_html (wd_document Window<3>))) Int<5>)
+          (((SomeHTMLElement HTMLElement<0>)
+            (and
+             (is_valid_content_html_element ContentElement<2> HTMLElement<0>)
+             (match ContentElement<2>
+              (((ContentElementHTML HTML<8>) true)
+               ((ContentElementImage Image<3>) true)
+               ((ContentElementScript Script<4>)
+                (and (= (script_nonce Script<4>) Int<3>)
+                 (match (rp_hd_csp (dc_headers (wd_document Window<3>)))
+                  (((SomeCSP CSP<0>)
+                    (match (csp_script_src CSP<0>)
+                     (((SomeCSPSrc CSPSrc<0>)
+                       (match (origin_of_url (wd_location Window<3>))
+                        (((SomeOrigin Origin<4>)
+                          (csp_src_match CSPSrc<0> Origin<4>
+                           (script_src Script<4>))) 
+                         (NoneOrigin false)))) (NoneCSPSrc true))))
+                   (NoneCSP true)))))
+               ((ContentElementFrame Frame<3> HTML<6>)
+                (and
+                 (match (url_protocol (rp_url Response<1>))
+                  ((ProtocolHTTP true) (ProtocolHTTPS true)
+                   (ProtocolData
+                    (match (url_path (rp_url Response<1>))
+                     (((url_path_data Int<16> Int<15>)
+                       (match
+                        (readoptionInt
+                         (in_body (dc_init (wd_document Window<3>))) Int<5>)
+                        (((SomeInt Int<17>)
+                          (ite
+                           (c_csp_inherit_local_from_initiator
+                            (config Global<1>))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp
+                             (dc_headers
+                              (wd_document
+                               (readWindow (windows Global<1>) Int<17>)))))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp (dc_headers (wd_document Window<2>))))))
+                         (NoneInt
+                          (= (rp_hd_csp (rp_headers Response<1>))
+                           (rp_hd_csp (dc_headers (wd_document Window<2>))))))))
+                      ((url_path_blob Origin<1> Int<13>)
+                       (match (readoptionBlob ArrayoptionBlob<1> Int<13>)
+                        (((SomeBlob Blob<1>)
+                          (ite
+                           (c_csp_inherit_blob_from_creator
+                            (config Global<1>))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (blob_csp Blob<1>))
+                           (match
+                            (readoptionInt
+                             (in_body (dc_init (wd_document Window<3>)))
+                             Int<5>)
+                            (((SomeInt Int<14>)
+                              (ite
+                               (c_csp_inherit_local_from_initiator
+                                (config Global<1>))
+                               (= (rp_hd_csp (rp_headers Response<1>))
+                                (rp_hd_csp
+                                 (dc_headers
+                                  (wd_document
+                                   (readWindow (windows Global<1>) Int<14>)))))
+                               (= (rp_hd_csp (rp_headers Response<1>))
+                                (rp_hd_csp
+                                 (dc_headers (wd_document Window<2>))))))
+                             (NoneInt
+                              (= (rp_hd_csp (rp_headers Response<1>))
+                               (rp_hd_csp
+                                (dc_headers (wd_document Window<2>)))))))))
+                         (NoneBlob false))))
+                      ((url_path_res Path<1>)
+                       (match
+                        (readoptionInt
+                         (in_body (dc_init (wd_document Window<3>))) Int<5>)
+                        (((SomeInt Int<12>)
+                          (ite
+                           (c_csp_inherit_local_from_initiator
+                            (config Global<1>))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp
+                             (dc_headers
+                              (wd_document
+                               (readWindow (windows Global<1>) Int<12>)))))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp (dc_headers (wd_document Window<2>))))))
+                         (NoneInt
+                          (= (rp_hd_csp (rp_headers Response<1>))
+                           (rp_hd_csp (dc_headers (wd_document Window<2>)))))))))))
+                   (ProtocolBlob
+                    (match (url_path (rp_url Response<1>))
+                     (((url_path_data Int<10> Int<9>)
+                       (match
+                        (readoptionInt
+                         (in_body (dc_init (wd_document Window<3>))) Int<5>)
+                        (((SomeInt Int<11>)
+                          (ite
+                           (c_csp_inherit_local_from_initiator
+                            (config Global<1>))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp
+                             (dc_headers
+                              (wd_document
+                               (readWindow (windows Global<1>) Int<11>)))))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp (dc_headers (wd_document Window<2>))))))
+                         (NoneInt
+                          (= (rp_hd_csp (rp_headers Response<1>))
+                           (rp_hd_csp (dc_headers (wd_document Window<2>))))))))
+                      ((url_path_blob Origin<0> Int<7>)
+                       (match (readoptionBlob ArrayoptionBlob<1> Int<7>)
+                        (((SomeBlob Blob<0>)
+                          (ite
+                           (c_csp_inherit_blob_from_creator
+                            (config Global<1>))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (blob_csp Blob<0>))
+                           (match
+                            (readoptionInt
+                             (in_body (dc_init (wd_document Window<3>)))
+                             Int<5>)
+                            (((SomeInt Int<8>)
+                              (ite
+                               (c_csp_inherit_local_from_initiator
+                                (config Global<1>))
+                               (= (rp_hd_csp (rp_headers Response<1>))
+                                (rp_hd_csp
+                                 (dc_headers
+                                  (wd_document
+                                   (readWindow (windows Global<1>) Int<8>)))))
+                               (= (rp_hd_csp (rp_headers Response<1>))
+                                (rp_hd_csp
+                                 (dc_headers (wd_document Window<2>))))))
+                             (NoneInt
+                              (= (rp_hd_csp (rp_headers Response<1>))
+                               (rp_hd_csp
+                                (dc_headers (wd_document Window<2>)))))))))
+                         (NoneBlob false))))
+                      ((url_path_res Path<0>)
+                       (match
+                        (readoptionInt
+                         (in_body (dc_init (wd_document Window<3>))) Int<5>)
+                        (((SomeInt Int<6>)
+                          (ite
+                           (c_csp_inherit_local_from_initiator
+                            (config Global<1>))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp
+                             (dc_headers
+                              (wd_document
+                               (readWindow (windows Global<1>) Int<6>)))))
+                           (= (rp_hd_csp (rp_headers Response<1>))
+                            (rp_hd_csp (dc_headers (wd_document Window<2>))))))
+                         (NoneInt
+                          (= (rp_hd_csp (rp_headers Response<1>))
+                           (rp_hd_csp (dc_headers (wd_document Window<2>)))))))))))))
+                 (= (readWindow (windows Global<1>) (frame_window Frame<3>))
+                  (build_toplevel_window Int<3> (SomeInt Int<2>)
+                   FetchEngine<1> Response<1> HTML<6>))))))
+             (= Window<2>
+              (update_page_element_at_idx Int<3> Window<3>
+               (rp_url Response<1>) Int<5> ContentElement<2>))))
+           (NoneHTMLElement false)))))))) (NoneContentElement false)))))
+
+(declare-rel update_window_on_response (Global Int FetchEngine
+ ArrayoptionBlob Response NestedDOMPath Window Window))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt DOMSelector<0>))
+   (= (readWindow (windows Global<0>) Int<1>) Window<1>)
+   (render_window_dom_path_on_response Global<0> Int<0> FetchEngine<0>
+    Response<0> DOMSelector<0> Window<0> Window<1> Int<1> ArrayoptionBlob<0>))
+  (update_window_on_response Global<0> Int<0> FetchEngine<0>
+   ArrayoptionBlob<0> Response<0> NestedDOMPath<0> Window<0> Window<1>))
+ Render_window_base)
+
+(declare-var Int<2> Int)
+
+(declare-var Window<3> Window)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<1> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<2>))
+    Int<1> Frame<0> HTML<0> Window<3>)
+   (update_window_on_response Global<0> Int<2> FetchEngine<0>
+    ArrayoptionBlob<0> Response<0> (DOMPath listInt<0> DOMSelector<0>)
+    Window<3> Window<1>)
+   (= (readWindow (windows Global<0>) Int<0>) Window<1>)
+   (= Window<0>
+    (update_page_element_at_idx Int<2> Window<2> (rp_url Response<0>) Int<1>
+     (ContentElementFrame (Build_Frame (frame_src Frame<0>) Int<0>) HTML<0>))))
+  (update_window_on_response Global<0> Int<2> FetchEngine<0>
+   ArrayoptionBlob<0> Response<0> NestedDOMPath<0> Window<2> Window<0>))
+ Render_window_rec)
+
+(declare-var optionInt<0> optionInt)
+
+(define-fun writeoptionInt ((a ArrayoptionInt) (i Int) (e optionInt))
+ ArrayoptionInt
+ (ite (= i 0)
+  (Build_ArrayoptionInt e (@1ArrayoptionInt a) (@2ArrayoptionInt a)
+   (@3ArrayoptionInt a) (@4ArrayoptionInt a) (@defaultArrayoptionInt a))
+  (ite (= i 1)
+   (Build_ArrayoptionInt (@0ArrayoptionInt a) e (@2ArrayoptionInt a)
+    (@3ArrayoptionInt a) (@4ArrayoptionInt a) (@defaultArrayoptionInt a))
+   (ite (= i 2)
+    (Build_ArrayoptionInt (@0ArrayoptionInt a) (@1ArrayoptionInt a) e
+     (@3ArrayoptionInt a) (@4ArrayoptionInt a) (@defaultArrayoptionInt a))
+    (ite (= i 3)
+     (Build_ArrayoptionInt (@0ArrayoptionInt a) (@1ArrayoptionInt a)
+      (@2ArrayoptionInt a) e (@4ArrayoptionInt a) 
+      (@defaultArrayoptionInt a))
+     (ite (= i 4)
+      (Build_ArrayoptionInt (@0ArrayoptionInt a) (@1ArrayoptionInt a)
+       (@2ArrayoptionInt a) (@3ArrayoptionInt a) e
+       (@defaultArrayoptionInt a)) a))))))
+
+(define-fun update_initiator_at_idx
+ ((Window<2> Window) (Int<2> Int) (optionInt<1> optionInt)) Window
+ (Build_Window (wd_nonce Window<2>) (wd_parent Window<2>)
+  (wd_location Window<2>) (wd_document_domain Window<2>)
+  (Build_Document (dc_version (wd_document Window<2>))
+   (dc_nonce (wd_document Window<2>)) (dc_headers (wd_document Window<2>))
+   (dc_html (wd_document Window<2>)) (dc_dom (wd_document Window<2>))
+   (Build_Initiators (in_toplevel (dc_init (wd_document Window<2>)))
+    (writeoptionInt (in_body (dc_init (wd_document Window<2>))) Int<2>
+     optionInt<1>)))))
+
+(declare-rel update_html_req_initiator (Global Int optionInt NestedDOMPath
+ Window Window))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt (DOMIndex Int<1>)))
+   (= Window<0> (update_initiator_at_idx Window<1> Int<1> optionInt<0>)))
+  (update_html_req_initiator Global<0> Int<0> optionInt<0> NestedDOMPath<0>
+   Window<1> Window<0>)) Update_init_base)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<0> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<3>))
+    Int<0> Frame<0> HTML<0> Window<2>)
+   (update_html_req_initiator Global<0> Int<2> optionInt<0>
+    (DOMPath listInt<0> DOMSelector<0>) Window<2> Window<0>)
+   (= (readWindow (windows Global<0>) Int<1>) Window<0>)
+   (= Window<1>
+    (update_page_element_at_idx Int<2> Window<3> (wd_location Window<2>)
+     Int<0>
+     (ContentElementFrame (Build_Frame (frame_src Frame<0>) Int<1>) HTML<0>))))
+  (update_html_req_initiator Global<0> Int<2> optionInt<0> NestedDOMPath<0>
+   Window<3> Window<1>)) Upate_init_rec)
+
+(declare-var HTMLElement<0> HTMLElement)
+
+(define-fun is_same_origin_window_domain
+ ((Window<4> Window) (Window<3> Window)) Bool
+ (match (wd_document_domain Window<4>)
+  (((SomeDomain Domain<1>)
+    (match (wd_document_domain Window<3>)
+     (((SomeDomain Domain<2>)
+       (and
+        (= (url_protocol (wd_location Window<4>))
+         (url_protocol (wd_location Window<3>))) (= Domain<1> Domain<2>)))
+      (NoneDomain false))))
+   (NoneDomain
+    (match (wd_document_domain Window<3>)
+     (((SomeDomain Domain<0>) false)
+      (NoneDomain
+       (and
+        (= (origin_of_url (wd_location Window<4>))
+         (origin_of_url (wd_location Window<3>)))
+        (not (= (origin_of_url (wd_location Window<4>)) NoneOrigin))))))))))
+
+(define-fun writeoptionHTMLElement
+ ((a ArrayoptionHTMLElement) (i Int) (e optionHTMLElement))
+ ArrayoptionHTMLElement
+ (ite (= i 0)
+  (Build_ArrayoptionHTMLElement e (@1ArrayoptionHTMLElement a)
+   (@2ArrayoptionHTMLElement a) (@3ArrayoptionHTMLElement a)
+   (@4ArrayoptionHTMLElement a) (@defaultArrayoptionHTMLElement a))
+  (ite (= i 1)
+   (Build_ArrayoptionHTMLElement (@0ArrayoptionHTMLElement a) e
+    (@2ArrayoptionHTMLElement a) (@3ArrayoptionHTMLElement a)
+    (@4ArrayoptionHTMLElement a) (@defaultArrayoptionHTMLElement a))
+   (ite (= i 2)
+    (Build_ArrayoptionHTMLElement (@0ArrayoptionHTMLElement a)
+     (@1ArrayoptionHTMLElement a) e (@3ArrayoptionHTMLElement a)
+     (@4ArrayoptionHTMLElement a) (@defaultArrayoptionHTMLElement a))
+    (ite (= i 3)
+     (Build_ArrayoptionHTMLElement (@0ArrayoptionHTMLElement a)
+      (@1ArrayoptionHTMLElement a) (@2ArrayoptionHTMLElement a) e
+      (@4ArrayoptionHTMLElement a) (@defaultArrayoptionHTMLElement a))
+     (ite (= i 4)
+      (Build_ArrayoptionHTMLElement (@0ArrayoptionHTMLElement a)
+       (@1ArrayoptionHTMLElement a) (@2ArrayoptionHTMLElement a)
+       (@3ArrayoptionHTMLElement a) e (@defaultArrayoptionHTMLElement a)) a))))))
+
+(define-fun update_html_element_at_idx
+ ((Int<21> Int) (Window<5> Window) (Int<20> Int)
+ (HTMLElement<1> HTMLElement)) Window
+ (Build_Window (wd_nonce Window<5>) (wd_parent Window<5>)
+  (wd_location Window<5>) (wd_document_domain Window<5>)
+  (Build_Document (+ Int<21> 1) (dc_nonce (wd_document Window<5>))
+   (dc_headers (wd_document Window<5>))
+   (Build_HTML (html_nonce (dc_html (wd_document Window<5>)))
+    (html_head (dc_html (wd_document Window<5>)))
+    (writeoptionHTMLElement (html_body (dc_html (wd_document Window<5>)))
+     Int<20> (SomeHTMLElement HTMLElement<1>)))
+   (Build_DOM (dm_nonce (dc_dom (wd_document Window<5>)))
+    (dm_head (dc_dom (wd_document Window<5>)))
+    (writeoptionDOMElement (dm_body (dc_dom (wd_document Window<5>))) Int<20>
+     (render_static_element (SomeHTMLElement HTMLElement<1>))))
+   (dc_init (wd_document Window<5>)))))
+
+(declare-rel update_window_html_from_ctx (Global Int Window HTMLElement
+ NestedDOMPath Window Window))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt (DOMIndex Int<0>)))
+   (is_same_origin_window_domain Window<1> Window<0>)
+   (= Window<2>
+    (update_html_element_at_idx Int<1> Window<1> Int<0> HTMLElement<0>)))
+  (update_window_html_from_ctx Global<0> Int<1> Window<0> HTMLElement<0>
+   NestedDOMPath<0> Window<1> Window<2>)) Update_html_base)
+
+(declare-var Window<4> Window)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<0> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<3>))
+    Int<0> Frame<0> HTML<0> Window<2>)
+   (update_window_html_from_ctx Global<0> Int<2> Window<0> HTMLElement<0>
+    (DOMPath listInt<0> DOMSelector<0>) Window<2> Window<1>)
+   (= (readWindow (windows Global<0>) Int<1>) Window<1>)
+   (= Window<4>
+    (update_page_element_at_idx Int<2> Window<3> (wd_location Window<2>)
+     Int<0>
+     (ContentElementFrame (Build_Frame (frame_src Frame<0>) Int<1>)
+      (dc_html (wd_document Window<1>))))))
+  (update_window_html_from_ctx Global<0> Int<2> Window<0> HTMLElement<0>
+   NestedDOMPath<0> Window<3> Window<4>)) Update_html_rec)
+
+(declare-rel is_secure_context (Global Window NestedDOMPath))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt DOMSelector<0>))
+   (= (url_protocol (wd_location Window<0>)) ProtocolHTTPS))
+  (is_secure_context Global<0> Window<0> NestedDOMPath<0>)) Secure_ctx_base)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<0> listInt<0>) DOMSelector<0>))
+   (= (url_protocol (wd_location Window<0>)) ProtocolHTTPS)
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<0>))
+    Int<0> Frame<0> HTML<0> Window<1>)
+   (is_secure_context Global<0> Window<1>
+    (DOMPath listInt<0> DOMSelector<0>)))
+  (is_secure_context Global<0> Window<0> NestedDOMPath<0>)) Secure_ctx_rec)
+
+(declare-rel window_ctx_of_dom_path (Global Window NestedDOMPath Window))
+
+(rule
+ (=>
+  (window_ctx_of_dom_path_rec Global<0> Window<1> Window<0> NestedDOMPath<0>)
+  (window_ctx_of_dom_path Global<0> Window<0> NestedDOMPath<0> Window<1>))
+ Window_ctx_in_dom_pt)
+
+(declare-datatype StorageItem
+ ((Build_StorageItem (si_origin Origin) (si_name Int) (si_value Int))))
+
+(declare-datatype optionStorageItem
+ ((SomeStorageItem (@0SomeStorageItem StorageItem)) (NoneStorageItem )))
+
+(declare-datatype ArrayoptionStorageItem
+ ((Build_ArrayoptionStorageItem
+   (@0ArrayoptionStorageItem optionStorageItem)
+   (@1ArrayoptionStorageItem optionStorageItem)
+   (@2ArrayoptionStorageItem optionStorageItem)
+   (@3ArrayoptionStorageItem optionStorageItem)
+   (@4ArrayoptionStorageItem optionStorageItem)
+   (@defaultArrayoptionStorageItem optionStorageItem))))
+
+(declare-datatype ArrayoptionSetCookie
+ ((Build_ArrayoptionSetCookie
+   (@0ArrayoptionSetCookie optionSetCookie)
+   (@1ArrayoptionSetCookie optionSetCookie)
+   (@2ArrayoptionSetCookie optionSetCookie)
+   (@3ArrayoptionSetCookie optionSetCookie)
+   (@4ArrayoptionSetCookie optionSetCookie)
+   (@defaultArrayoptionSetCookie optionSetCookie))))
+
+(declare-datatype ServiceWorker
+ ((Build_ServiceWorker (wk_version Int) (wk_cache ArrayoptionInt))))
+
+(declare-datatype State
+ ((Build_State
+   (st_version Int) (st_fetch_engine FetchEngine)
+   (st_service_worker ServiceWorker) (st_window Window)
+   (st_cookiejar ArrayoptionSetCookie) (st_blob_store ArrayoptionBlob)
+   (st_local_storage ArrayoptionStorageItem))))
+
+(declare-var State<0> State)
+
+(declare-datatype ScriptObject
+ ((SOUrl (@0SOUrl URL)) (SOHTML (@0SOHTML HTMLElement))
+  (SOTrustedHTML (@0SOTrustedHTML Window) (@1SOTrustedHTML HTMLElement))
+  (SODOMElt (@0SODOMElt DOMElement))
+  (SOCookie (@0SOCookie Int) (@1SOCookie CookieMapping))
+  (SOSetCookie (@0SOSetCookie SetCookie))
+  (SORequestHeaders (@0SORequestHeaders RequestHeaders))
+  (SORequest (@0SORequest Request))
+  (SOResponseHeaders (@0SOResponseHeaders ResponseHeaders))
+  (SOResponse (@0SOResponse Response)) (SODOMRef (@0SODOMRef NestedDOMPath))
+  (SOStorageItem (@0SOStorageItem StorageItem))))
+
+(declare-rel Scriptstate (Global State Script ScriptObject))
+
+(rule
+ (=> (Scriptstate Global<0> State<0> Script<0> (SOResponse Response<0>))
+  (Scriptstate Global<0> State<0> Script<0> (SOUrl (rp_url Response<0>))))
+ Script_destructure_rp_url)
+
+(define-fun remove_forbidden_rp_headers
+ ((Global<1> Global) (ResponseHeaders<0> ResponseHeaders)) ResponseHeaders
+ (ite (c_forbidden_headers (config Global<1>))
+  (Build_ResponseHeaders (rp_hd_content_type ResponseHeaders<0>)
+   NoneSetCookie (rp_hd_access_control_allow_origin ResponseHeaders<0>)
+   (rp_hd_location ResponseHeaders<0>) (rp_hd_csp ResponseHeaders<0>)
+   (rp_hd_referrer_policy ResponseHeaders<0>)) ResponseHeaders<0>))
+
+(rule
+ (=> (Scriptstate Global<0> State<0> Script<0> (SOResponse Response<0>))
+  (Scriptstate Global<0> State<0> Script<0>
+   (SOResponseHeaders
+    (remove_forbidden_rp_headers Global<0> (rp_headers Response<0>)))))
+ Script_destructure_rp_hd)
+
+(declare-var SetCookie<0> SetCookie)
+
+(declare-var ResponseHeaders<0> ResponseHeaders)
+
+(rule
+ (=>
+  (and
+   (Scriptstate Global<0> State<0> Script<0>
+    (SOResponseHeaders ResponseHeaders<0>))
+   (match (rp_hd_set_cookie ResponseHeaders<0>)
+    (((SomeSetCookie SetCookie<1>) (= SetCookie<1> SetCookie<0>))
+     (NoneSetCookie false))))
+  (Scriptstate Global<0> State<0> Script<0> (SOSetCookie SetCookie<0>)))
+ Script_destructure_rp_hd_cookie)
+
+(define-fun readoptionSetCookie ((a ArrayoptionSetCookie) (i Int))
+ optionSetCookie
+ (ite (= i 0) (@0ArrayoptionSetCookie a)
+  (ite (= i 1) (@1ArrayoptionSetCookie a)
+   (ite (= i 2) (@2ArrayoptionSetCookie a)
+    (ite (= i 3) (@3ArrayoptionSetCookie a)
+     (ite (= i 4) (@4ArrayoptionSetCookie a)
+      (@defaultArrayoptionSetCookie a)))))))
+
+(rule
+ (=>
+  (and (Scriptstate Global<0> State<0> Script<0> (SOSetCookie SetCookie<0>))
+   (= (readoptionSetCookie (st_cookiejar State<0>) Int<0>)
+    (SomeSetCookie SetCookie<0>)))
+  (Scriptstate Global<0> State<0> Script<0>
+   (SOCookie Int<0>
+    (Build_CookieMapping (sc_name SetCookie<0>) (sc_value SetCookie<0>)))))
+ Script_destructure_rp_hd_cookie_mapping)
+
+(define-fun is_true ((Bool<0> Bool)) Bool (= Bool<0> true))
+
+(define-fun andb ((Bool<2> Bool) (Bool<1> Bool)) Bool
+ (ite Bool<2> Bool<1> false))
+
+(define-fun eq_or_subpath ((Path<2> Path) (Path<1> Path)) Bool
+ (match Path<2>
+  ((slash (match Path<1> ((slash true) ((anypath Int<3>) false))))
+   ((anypath Int<1>)
+    (match Path<1> ((slash true) ((anypath Int<2>) (= Int<1> Int<2>))))))))
+
+(define-fun implb ((Bool<6> Bool) (Bool<5> Bool)) Bool
+ (ite Bool<6> Bool<5> true))
+
+(define-fun checkb_secure_protocol ((URL<1> URL) (SetCookie<3> SetCookie))
+ Bool
+ (implb (sc_secure SetCookie<3>) (= (url_protocol URL<1>) ProtocolHTTPS)))
+
+(define-fun eq_or_subdomain ((Domain<4> Domain) (Domain<3> Domain)) Bool
+ (match Domain<4>
+  (((domain Int<12>)
+    (match Domain<3>
+     (((domain Int<15>) (= Int<12> Int<15>))
+      ((subdomain Int<14> Int<13>) false))))
+   ((subdomain Int<8> Int<7>)
+    (match Domain<3>
+     (((domain Int<11>) (= Int<7> Int<11>))
+      ((subdomain Int<10> Int<9>)
+       (andb (= Int<8> Int<10>) (= Int<7> Int<9>)))))))))
+
+(define-fun check_cookie_domain_send ((URL<2> URL) (SetCookie<4> SetCookie))
+ Bool
+ (match (sc_domain SetCookie<4>)
+  (((SomeDomain Domain<1>)
+    (match (url_host URL<2>)
+     (((SomeDomain Domain<2>) (eq_or_subdomain Domain<2> Domain<1>))
+      (NoneDomain false))))
+   (NoneDomain
+    (match (url_host URL<2>)
+     (((SomeDomain Domain<0>) (= (sc_reg_domain SetCookie<4>) Domain<0>))
+      (NoneDomain false)))))))
+
+(define-fun cookiejar_select_cookie ((URL<0> URL) (SetCookie<2> SetCookie))
+ Bool
+ (andb
+  (andb (check_cookie_domain_send URL<0> SetCookie<2>)
+   (checkb_secure_protocol URL<0> SetCookie<2>))
+  (match (url_path URL<0>)
+   (((url_path_data Int<6> Int<5>) false)
+    ((url_path_blob Origin<0> Int<4>) false)
+    ((url_path_res Path<0>) (eq_or_subpath Path<0> (sc_path SetCookie<2>)))))))
+
+(rule
+ (=>
+  (and
+   (is_script_in_dom_path Global<0> (st_window State<0>) NestedDOMPath<0>
+    Script<0> Window<0>)
+   (match (readoptionSetCookie (st_cookiejar State<0>) Int<0>)
+    (((SomeSetCookie SetCookie<1>)
+      (and
+       (is_true
+        (cookiejar_select_cookie (wd_location Window<0>) SetCookie<1>))
+       (= (sc_http_only SetCookie<1>) false) (= SetCookie<0> SetCookie<1>)))
+     (NoneSetCookie false))))
+  (Scriptstate Global<0> State<0> Script<0>
+   (SOCookie Int<0>
+    (Build_CookieMapping (sc_name SetCookie<0>) (sc_value SetCookie<0>)))))
+ Script_read_document_cookie)
+
+(rule
+ (=>
+  (and
+   (is_script_in_dom_path Global<0> (st_window State<0>) NestedDOMPath<0>
+    Script<0> Window<0>)
+   (= (ft_emitter (st_fetch_engine State<0>))
+    (EmitterScript NestedDOMPath<0> Script<0>))
+   (= (ft_response (st_fetch_engine State<0>)) (SomeResponse Response<0>)))
+  (Scriptstate Global<0> State<0> Script<0> (SOResponse Response<0>)))
+ Script_read_fetch_response)
+
+(rule
+ (=>
+  (and
+   (is_script_in_dom_path Global<0> (st_window State<0>) NestedDOMPath<0>
+    Script<0> Window<0>)
+   (match (rp_hd_csp (dc_headers (wd_document Window<0>)))
+    (((SomeCSP CSP<0>)
+      (match (csp_trusted_types CSP<0>)
+       (((SomeTrustedTypes TrustedTypes<0>)
+         (match (tt_policy TrustedTypes<0>)
+          (((SomeoptionInt optionInt<0>)
+            (match optionInt<0> (((SomeInt Int<0>) true) (NoneInt false))))
+           (NoneoptionInt true)))) (NoneTrustedTypes true)))) 
+     (NoneCSP true))))
+  (Scriptstate Global<0> State<0> Script<0>
+   (SOTrustedHTML Window<0> HTMLElement<0>))) Script_construct_trusted_type)
+
+(declare-var NestedDOMPath<1> NestedDOMPath)
+
+(rule
+ (=>
+  (and
+   (is_script_in_dom_path Global<0> (st_window State<0>) NestedDOMPath<0>
+    Script<0> Window<1>)
+   (window_ctx_of_dom_path Global<0> (st_window State<0>) NestedDOMPath<1>
+    Window<0>) (is_same_origin_window_domain Window<1> Window<0>))
+  (Scriptstate Global<0> State<0> Script<0> (SODOMRef NestedDOMPath<1>)))
+ Script_read_dom)
+
+(declare-var Origin<0> Origin)
+
+(declare-var StorageItem<0> StorageItem)
+
+(define-fun readoptionStorageItem ((a ArrayoptionStorageItem) (i Int))
+ optionStorageItem
+ (ite (= i 0) (@0ArrayoptionStorageItem a)
+  (ite (= i 1) (@1ArrayoptionStorageItem a)
+   (ite (= i 2) (@2ArrayoptionStorageItem a)
+    (ite (= i 3) (@3ArrayoptionStorageItem a)
+     (ite (= i 4) (@4ArrayoptionStorageItem a)
+      (@defaultArrayoptionStorageItem a)))))))
+
+(rule
+ (=>
+  (and
+   (is_script_in_dom_path Global<0> (st_window State<0>) NestedDOMPath<0>
+    Script<0> Window<0>)
+   (match (readoptionStorageItem (st_local_storage State<0>) Int<0>)
+    (((SomeStorageItem StorageItem<1>)
+      (and (= (origin_of_url (wd_location Window<0>)) (SomeOrigin Origin<0>))
+       (= (si_origin StorageItem<1>) Origin<0>)
+       (= StorageItem<0> StorageItem<1>))) (NoneStorageItem false))))
+  (Scriptstate Global<0> State<0> Script<0> (SOStorageItem StorageItem<0>)))
+ Script_get_storage_item)
+
+(declare-rel is_not_secure_context (Global Window NestedDOMPath))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt DOMSelector<0>))
+   (not (= (url_protocol (wd_location Window<0>)) ProtocolHTTPS)))
+  (is_not_secure_context Global<0> Window<0> NestedDOMPath<0>))
+ Not_secure_ctx_base)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<0> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<0>))
+    Int<0> Frame<0> HTML<0> Window<1>)
+   (or (not (= (url_protocol (wd_location Window<0>)) ProtocolHTTPS))
+    (is_not_secure_context Global<0> Window<1>
+     (DOMPath listInt<0> DOMSelector<0>))))
+  (is_not_secure_context Global<0> Window<0> NestedDOMPath<0>))
+ Not_secure_ctx_rec)
+
+(declare-var optionDomain<0> optionDomain)
+
+(define-fun update_document_domain
+ ((Window<3> Window) (optionDomain<1> optionDomain)) Window
+ (Build_Window (wd_nonce Window<3>) (wd_parent Window<3>)
+  (wd_location Window<3>) optionDomain<1> (wd_document Window<3>)))
+
+(declare-rel update_window_domain_from_ctx (Global Int Window optionDomain
+ NestedDOMPath Window Window))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt DOMSelector<0>))
+   (= Window<0> (update_document_domain Window<2> optionDomain<0>)))
+  (update_window_domain_from_ctx Global<0> Int<0> Window<1> optionDomain<0>
+   NestedDOMPath<0> Window<2> Window<0>)) Update_domain_base)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<0> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<4>))
+    Int<0> Frame<0> HTML<0> Window<2>)
+   (update_window_domain_from_ctx Global<0> Int<2> Window<0> optionDomain<0>
+    (DOMPath listInt<0> DOMSelector<0>) Window<2> Window<1>)
+   (= (readWindow (windows Global<0>) Int<1>) Window<1>)
+   (= Window<3>
+    (update_page_element_at_idx Int<2> Window<4> (wd_location Window<2>)
+     Int<0>
+     (ContentElementFrame (Build_Frame (frame_src Frame<0>) Int<1>) HTML<0>))))
+  (update_window_domain_from_ctx Global<0> Int<2> Window<0> optionDomain<0>
+   NestedDOMPath<0> Window<4> Window<3>)) Update_domain_rec)
+
+(define-fun check_same_site ((URL<4> URL) (SetCookie<2> SetCookie)) Bool
+ (match (sc_same_site SetCookie<2>)
+  ((SSStrict true) (SSLax true)
+   (SSNone
+    (and (= (url_protocol URL<4>) ProtocolHTTPS)
+     (= (sc_secure SetCookie<2>) true))))))
+
+(define-fun check_secure_protocol ((URL<5> URL) (SetCookie<3> SetCookie))
+ Bool (is_true (checkb_secure_protocol URL<5> SetCookie<3>)))
+
+(define-fun is_eq_or_subdomain ((Domain<7> Domain) (Domain<6> Domain)) Bool
+ (is_true (eq_or_subdomain Domain<7> Domain<6>)))
+
+(define-fun check_cookie_domain_set ((URL<9> URL) (SetCookie<7> SetCookie))
+ Bool
+ (match (url_host URL<9>)
+  (((SomeDomain Domain<4>)
+    (and (= (sc_reg_domain SetCookie<7>) Domain<4>)
+     (match (sc_domain SetCookie<7>)
+      (((SomeDomain Domain<5>) (is_eq_or_subdomain Domain<5> Domain<4>))
+       (NoneDomain true))))) (NoneDomain false))))
+
+(define-fun is_valid_setcookie ((URL<3> URL) (SetCookie<1> SetCookie)) Bool
+ (and (check_same_site URL<3> SetCookie<1>)
+  (match (sc_name SetCookie<1>)
+   (((NoPrefix Int<33>)
+     (and (check_secure_protocol URL<3> SetCookie<1>)
+      (check_cookie_domain_set URL<3> SetCookie<1>)))
+    ((Secure Int<23>)
+     (and (= (sc_secure SetCookie<1>) true)
+      (check_secure_protocol URL<3> SetCookie<1>)
+      (check_cookie_domain_set URL<3> SetCookie<1>)))
+    ((Host Int<19>)
+     (and (= (sc_secure SetCookie<1>) true)
+      (check_secure_protocol URL<3> SetCookie<1>)
+      (= (sc_path SetCookie<1>) slash)
+      (match (url_path URL<3>)
+       (((url_path_data Int<22> Int<21>) false)
+        ((url_path_blob Origin<6> Int<20>) false)
+        ((url_path_res Path<6>) (= Path<6> slash))))
+      (= (sc_domain SetCookie<1>) NoneDomain)
+      (match (url_host URL<3>)
+       (((SomeDomain Domain<3>) (= (sc_reg_domain SetCookie<1>) Domain<3>))
+        (NoneDomain false)))))))))
+
+(declare-rel is_valid_setcookie_from_ctx (Global Int Window SetCookie Window
+ NestedDOMPath))
+
+(rule
+ (=>
+  (and (= NestedDOMPath<0> (DOMPath nilInt DOMTopLevel))
+   (is_same_origin_window_domain Window<0> Window<1>)
+   (is_valid_setcookie (wd_location Window<1>) SetCookie<0>))
+  (is_valid_setcookie_from_ctx Global<0> Int<0> Window<0> SetCookie<0>
+   Window<1> NestedDOMPath<0>)) Valid_setcookie_base)
+
+(rule
+ (=>
+  (and
+   (= NestedDOMPath<0> (DOMPath (consInt Int<1> listInt<0>) DOMSelector<0>))
+   (is_frame_window_at_page_index Global<0> (dc_dom (wd_document Window<0>))
+    Int<1> Frame<0> HTML<0> Window<2>)
+   (is_valid_setcookie_from_ctx Global<0> Int<0> Window<1> SetCookie<0>
+    Window<2> (DOMPath listInt<0> DOMSelector<0>)))
+  (is_valid_setcookie_from_ctx Global<0> Int<0> Window<1> SetCookie<0>
+   Window<0> NestedDOMPath<0>)) Valid_setcookie_rec)
+
+(define-fun distinctRequest ((a ArrayRequest)) Bool
+ (distinct (@0ArrayRequest a) (@1ArrayRequest a) (@2ArrayRequest a)
+  (@3ArrayRequest a) (@4ArrayRequest a) (@defaultArrayRequest a)))
+
+(define-fun distinctResponse ((a ArrayResponse)) Bool
+ (distinct (@0ArrayResponse a) (@1ArrayResponse a) 
+  (@2ArrayResponse a) (@3ArrayResponse a) (@4ArrayResponse a)
+  (@defaultArrayResponse a)))
+
+(declare-datatype ArrayOrigin
+ ((Build_ArrayOrigin
+   (@0ArrayOrigin Origin) (@1ArrayOrigin Origin) (@2ArrayOrigin Origin)
+   (@3ArrayOrigin Origin) (@4ArrayOrigin Origin) (@defaultArrayOrigin Origin))))
+
+(define-fun distinctOrigin ((a ArrayOrigin)) Bool
+ (distinct (@0ArrayOrigin a) (@1ArrayOrigin a) (@2ArrayOrigin a)
+  (@3ArrayOrigin a) (@4ArrayOrigin a) (@defaultArrayOrigin a)))
+
+(define-fun fstOriginoptionCSP ((prod<0> prodOriginoptionCSP)) Origin
+ (match prod<0> (((pairOriginoptionCSP <1> <0>) <1>))))
+
+(define-fun <closure1>prodOriginoptionCSPOrigin ((T<0> prodOriginoptionCSP))
+ Origin (fstOriginoptionCSP T<0>))
+
+(define-fun <map><closure1>prodOriginoptionCSPOrigin
+ ((a ArrayprodOriginoptionCSP)) ArrayOrigin
+ (Build_ArrayOrigin
+  (<closure1>prodOriginoptionCSPOrigin (@0ArrayprodOriginoptionCSP a))
+  (<closure1>prodOriginoptionCSPOrigin (@1ArrayprodOriginoptionCSP a))
+  (<closure1>prodOriginoptionCSPOrigin (@2ArrayprodOriginoptionCSP a))
+  (<closure1>prodOriginoptionCSPOrigin (@3ArrayprodOriginoptionCSP a))
+  (<closure1>prodOriginoptionCSPOrigin (@4ArrayprodOriginoptionCSP a))
+  (<closure1>prodOriginoptionCSPOrigin (@defaultArrayprodOriginoptionCSP a))))
+
+(define-fun initial_url () URL
+ (Build_URL ProtocolHTTP (SomeDomain (domain 0)) (SomeInt 0)
+  (url_path_res slash)))
+
+(define-fun readprodOriginoptionCSP ((a ArrayprodOriginoptionCSP) (i Int))
+ prodOriginoptionCSP
+ (ite (= i 0) (@0ArrayprodOriginoptionCSP a)
+  (ite (= i 1) (@1ArrayprodOriginoptionCSP a)
+   (ite (= i 2) (@2ArrayprodOriginoptionCSP a)
+    (ite (= i 3) (@3ArrayprodOriginoptionCSP a)
+     (ite (= i 4) (@4ArrayprodOriginoptionCSP a)
+      (@defaultArrayprodOriginoptionCSP a)))))))
+
+(declare-rel Reachable (Global listEvent State))
+
+(define-fun constoptionStorageItem ((e optionStorageItem))
+ ArrayoptionStorageItem (Build_ArrayoptionStorageItem e e e e e e))
+
+(define-fun constoptionBlob ((e optionBlob)) ArrayoptionBlob
+ (Build_ArrayoptionBlob e e e e e e))
+
+(define-fun constoptionSetCookie ((e optionSetCookie)) ArrayoptionSetCookie
+ (Build_ArrayoptionSetCookie e e e e e e))
+
+(define-fun constoptionDOMElement ((e optionDOMElement))
+ ArrayoptionDOMElement (Build_ArrayoptionDOMElement e e e e e e))
+
+(define-fun initial_dom () DOM
+ (Build_DOM 0 0 (constoptionDOMElement NoneDOMElement)))
+
+(define-fun constoptionHTMLElement ((e optionHTMLElement))
+ ArrayoptionHTMLElement (Build_ArrayoptionHTMLElement e e e e e e))
+
+(define-fun initial_html () HTML
+ (Build_HTML 0 0 (constoptionHTMLElement NoneHTMLElement)))
+
+(define-fun initial_response_headers () ResponseHeaders
+ (Build_ResponseHeaders NoneContentType NoneSetCookie NoneOrigin NoneURL
+  NoneCSP NoneReferrerPolicy))
+
+(define-fun initial_document () Document
+ (Build_Document 0 0 initial_response_headers initial_html initial_dom
+  empty_initiators))
+
+(define-fun initial_window () Window
+ (Build_Window 0 NoneInt initial_url NoneDomain initial_document))
+
+(define-fun initial_service_worker () ServiceWorker
+ (Build_ServiceWorker 0 (constoptionInt NoneInt)))
+
+(define-fun constoptionprodprodEmitterIntInt
+ ((e optionprodprodEmitterIntInt)) ArrayoptionprodprodEmitterIntInt
+ (Build_ArrayoptionprodprodEmitterIntInt e e e e e e))
+
+(define-fun constoptionCookieMapping ((e optionCookieMapping))
+ ArrayoptionCookieMapping (Build_ArrayoptionCookieMapping e e e e e e))
+
+(define-fun initial_request () Request
+ (Build_Request MethodGet initial_url
+  (Build_RequestHeaders NoneOrigin
+   (constoptionCookieMapping NoneCookieMapping) NoneURL) NoneInt))
+
+(define-fun initial_fetch_engine () FetchEngine
+ (Build_FetchEngine 0 EmitterClient initial_request 0 NoneResponse
+  (constoptionprodprodEmitterIntInt NoneprodprodEmitterIntInt)))
+
+(define-fun initial_state () State
+ (Build_State 0 initial_fetch_engine initial_service_worker initial_window
+  (constoptionSetCookie NoneSetCookie) (constoptionBlob NoneBlob)
+  (constoptionStorageItem NoneStorageItem)))
+
+(rule
+ (=>
+  (and (distinctRequest (requests Global<0>))
+   (distinctResponse (responses Global<0>))
+   (distinctOrigin
+    (<map><closure1>prodOriginoptionCSPOrigin (origin_csp Global<0>)))
+   (match (origin_of_url initial_url)
+    (((SomeOrigin Origin<2>)
+      (= (readprodOriginoptionCSP (origin_csp Global<0>) 0)
+       (pairOriginoptionCSP Origin<2> NoneCSP))) (NoneOrigin false))))
+  (Reachable Global<0> nilEvent initial_state)) Initial_state_is_reachable)
+
+(declare-var ArrayoptionStorageItem<0> ArrayoptionStorageItem)
+
+(declare-var FetchEngine<1> FetchEngine)
+
+(declare-var ServiceWorker<0> ServiceWorker)
+
+(declare-var ArrayoptionSetCookie<0> ArrayoptionSetCookie)
+
+(define-fun is_cross_origin_request ((Window<3> Window) (Request<2> Request))
+ Bool
+ (and
+  (not
+   (= (origin_of_url (rq_url Request<2>))
+    (origin_of_url (wd_location Window<3>))))
+  (not (= (origin_of_url (rq_url Request<2>)) NoneOrigin))))
+
+(define-fun is_cors_simple_request ((Request<3> Request)) Bool
+ (or (= (rq_method Request<3>) MethodGet)
+  (= (rq_method Request<3>) MethodPost)))
+
+(define-fun is_allowed_form_method
+ ((Global<2> Global) (RequestMethod<0> RequestMethod)) Bool
+ (match RequestMethod<0>
+  ((MethodGet true) (MethodPost true)
+   (MethodPut (is_true (c_earlyhtml5_form_methods (config Global<2>))))
+   (MethodDelete (is_true (c_earlyhtml5_form_methods (config Global<2>))))
+   (MethodOptions false))))
+
+(define-fun is_valid_emitter
+ ((Emitter<1> Emitter) (Global<1> Global) (Window<2> Window)) Bool
+ (match Emitter<1>
+  ((EmitterClient true)
+   ((EmitterScript NestedDOMPath<1> Script<0>)
+    (match NestedDOMPath<1>
+     (((DOMPath listInt<1> DOMSelector<1>)
+       (match DOMSelector<1>
+        ((DOMTopLevel false)
+         ((DOMIndex Int<23>)
+          (is_script_at_page_index (dc_dom (wd_document Window<2>)) Int<23>
+           Script<0>))))))))
+   ((EmitterForm NestedDOMPath<0> Form<0>)
+    (match NestedDOMPath<0>
+     (((DOMPath listInt<0> DOMSelector<0>)
+       (match DOMSelector<0>
+        ((DOMTopLevel false)
+         ((DOMIndex Int<21>)
+          (and
+           (is_form_at_page_index (dc_dom (wd_document Window<2>)) Int<21>
+            Form<0>)
+           (is_allowed_form_method Global<1> (form_method Form<0>))))))))))
+   (EmitterWorker true)
+   ((EmitterCORSPreflight Int<2> Request<1>)
+    (and (is_cross_origin_request Window<2> Request<1>)
+     (not (is_cors_simple_request Request<1>)))))))
+
+(define-fun is_valid_url ((URL<5> URL)) Bool
+ (match (url_protocol URL<5>)
+  ((ProtocolHTTP
+    (match (url_path URL<5>)
+     (((url_path_data Int<40> Int<39>) false)
+      ((url_path_blob Origin<9> Int<38>) false)
+      ((url_path_res Path<9>)
+       (match (url_host URL<5>)
+        (((SomeDomain Domain<3>)
+          (match (url_port URL<5>)
+           (((SomeInt Int<37>) true) (NoneInt false)))) 
+         (NoneDomain false)))))))
+   (ProtocolHTTPS
+    (match (url_path URL<5>)
+     (((url_path_data Int<36> Int<35>) false)
+      ((url_path_blob Origin<8> Int<34>) false)
+      ((url_path_res Path<8>)
+       (match (url_host URL<5>)
+        (((SomeDomain Domain<2>)
+          (match (url_port URL<5>)
+           (((SomeInt Int<33>) true) (NoneInt false)))) 
+         (NoneDomain false)))))))
+   (ProtocolData
+    (match (url_path URL<5>)
+     (((url_path_data Int<31> Int<30>)
+       (match (url_host URL<5>)
+        (((SomeDomain Domain<1>) false)
+         (NoneDomain
+          (match (url_port URL<5>)
+           (((SomeInt Int<32>) false) (NoneInt true)))))))
+      ((url_path_blob Origin<7> Int<29>) false)
+      ((url_path_res Path<7>) false))))
+   (ProtocolBlob
+    (match (url_path URL<5>)
+     (((url_path_data Int<28> Int<27>) false)
+      ((url_path_blob Origin<6> Int<25>)
+       (match (url_host URL<5>)
+        (((SomeDomain Domain<0>) false)
+         (NoneDomain
+          (match (url_port URL<5>)
+           (((SomeInt Int<26>) false) (NoneInt true)))))))
+      ((url_path_res Path<6>) false)))))))
+
+(define-fun serialize_origin ((optionOrigin<0> optionOrigin)) optionOrigin
+ (match optionOrigin<0>
+  (((SomeOrigin Origin<16>)
+    (match Origin<16>
+     (((TupleOrigin Protocol<0> optionDomain<0> optionInt<0>)
+       optionOrigin<0>) ((OpaqueOrigin Int<60>) NoneOrigin))))
+   (NoneOrigin optionOrigin<0>))))
+
+(define-fun gen_referer
+ ((URL<10> URL) (optionReferrerPolicy<0> optionReferrerPolicy)) optionURL
+ (match optionReferrerPolicy<0>
+  (((SomeReferrerPolicy ReferrerPolicy<0>)
+    (match ReferrerPolicy<0>
+     ((ReferrerPolicyNoReferrer NoneURL)
+      (ReferrerPolicyOrigin
+       (match (origin_of_url URL<10>)
+        (((SomeOrigin Origin<21>)
+          (match Origin<21>
+           (((TupleOrigin Protocol<1> optionDomain<1> optionInt<1>)
+             (SomeURL
+              (Build_URL Protocol<1> optionDomain<1> optionInt<1>
+               (url_path_res slash)))) ((OpaqueOrigin Int<73>) NoneURL))))
+         (NoneOrigin NoneURL))))))) (NoneReferrerPolicy NoneURL))))
+
+(define-fun is_same_origin_request ((Window<7> Window) (Request<10> Request))
+ Bool
+ (and
+  (= (origin_of_url (rq_url Request<10>))
+   (origin_of_url (wd_location Window<7>)))
+  (not (= (origin_of_url (rq_url Request<10>)) NoneOrigin))))
+
+(define-fun is_valid_emitter_request
+ ((Emitter<2> Emitter) (Request<4> Request) (Window<4> Window)
+ (FetchEngine<2> FetchEngine) (Global<3> Global)) Bool
+ (match Emitter<2>
+  ((EmitterClient
+    (and (= (rq_method Request<4>) MethodGet)
+     (= (rq_hd_origin (rq_headers Request<4>)) NoneOrigin)
+     (= (rq_hd_referer (rq_headers Request<4>)) NoneURL)))
+   ((EmitterScript NestedDOMPath<5> Script<4>)
+    (and
+     (= (rq_hd_origin (rq_headers Request<4>))
+      (serialize_origin (origin_of_url (wd_location Window<4>))))
+     (= (rq_hd_referer (rq_headers Request<4>))
+      (gen_referer (wd_location Window<4>)
+       (rp_hd_referrer_policy (dc_headers (wd_document Window<4>)))))
+     (=>
+      (and (is_cross_origin_request Window<4> Request<4>)
+       (not (is_cors_simple_request Request<4>)))
+      (match (ft_emitter FetchEngine<2>)
+       ((EmitterClient false)
+        ((EmitterScript NestedDOMPath<7> Script<5>) false)
+        ((EmitterForm NestedDOMPath<6> Form<6>) false) 
+        (EmitterWorker false)
+        ((EmitterCORSPreflight Int<182> Request<14>)
+         (and (= Emitter<2> (readEmitter (emitters Global<3>) Int<182>))
+          (= Request<4> Request<14>)
+          (match (ft_response FetchEngine<2>)
+           (((SomeResponse Response<1>)
+             (match
+              (rp_hd_access_control_allow_origin (rp_headers Response<1>))
+              (((SomeOrigin Origin<63>)
+                (match (rq_hd_origin (rq_headers Request<4>))
+                 (((SomeOrigin Origin<64>) (= Origin<63> Origin<64>))
+                  (NoneOrigin false)))) (NoneOrigin false))))
+            (NoneResponse false))))))))))
+   ((EmitterForm NestedDOMPath<4> Form<5>)
+    (and (= (rq_method Request<4>) (form_method Form<5>))
+     (= (rq_url Request<4>) (form_action Form<5>))
+     (= (rq_hd_origin (rq_headers Request<4>))
+      (serialize_origin (origin_of_url (wd_location Window<4>))))
+     (= (rq_hd_referer (rq_headers Request<4>))
+      (gen_referer (wd_location Window<4>)
+       (rp_hd_referrer_policy (dc_headers (wd_document Window<4>)))))
+     (match (form_method Form<5>)
+      ((MethodGet true) (MethodPost true)
+       (MethodPut
+        (and (is_true (c_earlyhtml5_form_methods (config Global<3>)))
+         (is_same_origin_request Window<4> Request<4>)))
+       (MethodDelete
+        (and (is_true (c_earlyhtml5_form_methods (config Global<3>)))
+         (is_same_origin_request Window<4> Request<4>))) 
+       (MethodOptions true)))))
+   (EmitterWorker
+    (and
+     (= (rq_hd_origin (rq_headers Request<4>))
+      (serialize_origin (origin_of_url (wd_location Window<4>))))
+     (= (rq_hd_referer (rq_headers Request<4>)) NoneURL)
+     (=>
+      (and (is_cross_origin_request Window<4> Request<4>)
+       (not (is_cors_simple_request Request<4>)))
+      (match (ft_emitter FetchEngine<2>)
+       ((EmitterClient false)
+        ((EmitterScript NestedDOMPath<3> Script<3>) false)
+        ((EmitterForm NestedDOMPath<2> Form<4>) false) 
+        (EmitterWorker false)
+        ((EmitterCORSPreflight Int<99> Request<9>)
+         (and (= Emitter<2> (readEmitter (emitters Global<3>) Int<99>))
+          (= Request<4> Request<9>)
+          (match (ft_response FetchEngine<2>)
+           (((SomeResponse Response<0>)
+             (match
+              (rp_hd_access_control_allow_origin (rp_headers Response<0>))
+              (((SomeOrigin Origin<31>)
+                (match (rq_hd_origin (rq_headers Request<4>))
+                 (((SomeOrigin Origin<32>) (= Origin<31> Origin<32>))
+                  (NoneOrigin false)))) (NoneOrigin false))))
+            (NoneResponse false))))))))))
+   ((EmitterCORSPreflight Int<41> Request<5>)
+    (and (is_cross_origin_request Window<4> Request<4>)
+     (= (rq_hd_origin (rq_headers Request<4>))
+      (serialize_origin (origin_of_url (wd_location Window<4>))))
+     (= (rq_hd_referer (rq_headers Request<4>))
+      (gen_referer (wd_location Window<4>)
+       (rp_hd_referrer_policy (dc_headers (wd_document Window<4>)))))
+     (= (rq_method Request<4>) MethodOptions)
+     (= (rq_url Request<4>) (rq_url Request<5>)))))))
+
+(define-fun orb ((Bool<15> Bool) (Bool<14> Bool)) Bool
+ (ite Bool<15> true Bool<14>))
+
+(define-fun same_site ((Domain<7> Domain) (Domain<6> Domain)) Bool
+ (match Domain<7>
+  (((domain Int<786>)
+    (match Domain<6>
+     (((domain Int<789>) (= Int<786> Int<789>))
+      ((subdomain Int<788> Int<787>) (= Int<786> Int<787>)))))
+   ((subdomain Int<782> Int<781>)
+    (match Domain<6>
+     (((domain Int<785>) (= Int<781> Int<785>))
+      ((subdomain Int<784> Int<783>) (= Int<781> Int<783>))))))))
+
+(define-fun same_site_cookie
+ ((Domain<5> Domain) (Emitter<10> Emitter) (SetCookie<1> SetCookie)) Bool
+ (orb (same_site Domain<5> (sc_reg_domain SetCookie<1>))
+  (match Emitter<10>
+   ((EmitterClient
+     (orb (= (sc_same_site SetCookie<1>) SSLax)
+      (= (sc_same_site SetCookie<1>) SSNone)))
+    ((EmitterScript NestedDOMPath<37> Script<20>)
+     (= (sc_same_site SetCookie<1>) SSNone))
+    ((EmitterForm NestedDOMPath<36> Form<21>)
+     (= (sc_same_site SetCookie<1>) SSNone))
+    (EmitterWorker (= (sc_same_site SetCookie<1>) SSNone))
+    ((EmitterCORSPreflight Int<780> Request<64>) false)))))
+
+(define-fun event_request_select_cookie
+ ((Emitter<9> Emitter) (Request<63> Request) (Window<36> Window)
+ (optionSetCookie<0> optionSetCookie)) optionCookieMapping
+ (match optionSetCookie<0>
+  (((SomeSetCookie SetCookie<0>)
+    (match (url_host (wd_location Window<36>))
+     (((SomeDomain Domain<4>)
+       (ite
+        (andb (cookiejar_select_cookie (rq_url Request<63>) SetCookie<0>)
+         (same_site_cookie Domain<4> Emitter<9> SetCookie<0>))
+        (SomeCookieMapping
+         (Build_CookieMapping (sc_name SetCookie<0>) (sc_value SetCookie<0>)))
+        NoneCookieMapping)) (NoneDomain NoneCookieMapping))))
+   (NoneSetCookie NoneCookieMapping))))
+
+(define-fun <closure5>optionSetCookieoptionCookieMapping
+ ((Request<62> Request) (Emitter<8> Emitter) (Window<35> Window)
+ (T<0> optionSetCookie)) optionCookieMapping
+ (event_request_select_cookie Emitter<8> Request<62> Window<35> T<0>))
+
+(define-fun <map><closure5>optionSetCookieoptionCookieMapping
+ ((Request<61> Request) (Emitter<7> Emitter) (Window<34> Window)
+ (a ArrayoptionSetCookie)) ArrayoptionCookieMapping
+ (Build_ArrayoptionCookieMapping
+  (<closure5>optionSetCookieoptionCookieMapping Request<61> Emitter<7>
+   Window<34> (@0ArrayoptionSetCookie a))
+  (<closure5>optionSetCookieoptionCookieMapping Request<61> Emitter<7>
+   Window<34> (@1ArrayoptionSetCookie a))
+  (<closure5>optionSetCookieoptionCookieMapping Request<61> Emitter<7>
+   Window<34> (@2ArrayoptionSetCookie a))
+  (<closure5>optionSetCookieoptionCookieMapping Request<61> Emitter<7>
+   Window<34> (@3ArrayoptionSetCookie a))
+  (<closure5>optionSetCookieoptionCookieMapping Request<61> Emitter<7>
+   Window<34> (@4ArrayoptionSetCookie a))
+  (<closure5>optionSetCookieoptionCookieMapping Request<61> Emitter<7>
+   Window<34> (@defaultArrayoptionSetCookie a))))
+
+(define-fun <closure4>optionSetCookieoptionCookieMapping
+ ((Request<81> Request) (Emitter<27> Emitter) (Window<48> Window)
+ (T<6> optionSetCookie)) optionCookieMapping
+ (event_request_select_cookie Emitter<27> Request<81> Window<48> T<6>))
+
+(define-fun <map><closure4>optionSetCookieoptionCookieMapping
+ ((Request<80> Request) (Emitter<26> Emitter) (Window<47> Window)
+ (a ArrayoptionSetCookie)) ArrayoptionCookieMapping
+ (Build_ArrayoptionCookieMapping
+  (<closure4>optionSetCookieoptionCookieMapping Request<80> Emitter<26>
+   Window<47> (@0ArrayoptionSetCookie a))
+  (<closure4>optionSetCookieoptionCookieMapping Request<80> Emitter<26>
+   Window<47> (@1ArrayoptionSetCookie a))
+  (<closure4>optionSetCookieoptionCookieMapping Request<80> Emitter<26>
+   Window<47> (@2ArrayoptionSetCookie a))
+  (<closure4>optionSetCookieoptionCookieMapping Request<80> Emitter<26>
+   Window<47> (@3ArrayoptionSetCookie a))
+  (<closure4>optionSetCookieoptionCookieMapping Request<80> Emitter<26>
+   Window<47> (@4ArrayoptionSetCookie a))
+  (<closure4>optionSetCookieoptionCookieMapping Request<80> Emitter<26>
+   Window<47> (@defaultArrayoptionSetCookie a))))
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<0> FetchEngine<0> ServiceWorker<0> Window<1>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (= Int<1> (+ (ft_correlator FetchEngine<0>) 1))
+   (is_emitter_window_context Global<0> Emitter<0> Window<1> Window<0>)
+   (is_valid_emitter Emitter<0> Global<0> Window<0>)
+   (is_valid_url (rq_url Request<0>))
+   (match (ft_response FetchEngine<0>)
+    (((SomeResponse Response<2>)
+      (match (rp_code Response<2>)
+       ((ResponseOk
+         (is_valid_emitter_request Emitter<0> Request<0> Window<0>
+          FetchEngine<0> Global<0>))
+        (ResponseNoContent
+         (is_valid_emitter_request Emitter<0> Request<0> Window<0>
+          FetchEngine<0> Global<0>))
+        (ResponseFound
+         (and
+          (ite (c_redirect_preflight_requests (config Global<0>)) true
+           (match Emitter<0>
+            ((EmitterClient true)
+             ((EmitterScript NestedDOMPath<17> Script<10>) true)
+             ((EmitterForm NestedDOMPath<16> Form<11>) true)
+             (EmitterWorker true)
+             ((EmitterCORSPreflight Int<338> Request<27>) false))))
+          (match (rp_hd_location (rp_headers Response<2>))
+           (((SomeURL URL<84>)
+             (and (= (rq_url Request<0>) URL<84>)
+              (= (ft_emitter FetchEngine<0>) Emitter<0>)
+              (ite
+               (c_origin_header_on_cross_origin_redirect (config Global<0>))
+               (= (rq_hd_origin (rq_headers Request<0>))
+                (rq_hd_origin (rq_headers (ft_request FetchEngine<0>))))
+               (ite
+                (= (origin_of_url (rq_url Request<0>))
+                 (origin_of_url (rq_url (ft_request FetchEngine<0>))))
+                (= (rq_hd_origin (rq_headers Request<0>))
+                 (rq_hd_origin (rq_headers (ft_request FetchEngine<0>))))
+                (= (rq_hd_origin (rq_headers Request<0>)) NoneOrigin)))
+              (= (rq_hd_referer (rq_headers Request<0>)) NoneURL)
+              (= (rq_method Request<0>) MethodGet)
+              (= (rq_body Request<0>) NoneInt)))
+            (NoneURL
+             (is_valid_emitter_request Emitter<0> Request<0> Window<0>
+              FetchEngine<0> Global<0>))))))
+        (ResponseTemporaryRedirect
+         (and
+          (ite (c_redirect_preflight_requests (config Global<0>)) true
+           (match Emitter<0>
+            ((EmitterClient true)
+             ((EmitterScript NestedDOMPath<9> Script<6>) true)
+             ((EmitterForm NestedDOMPath<8> Form<7>) true)
+             (EmitterWorker true)
+             ((EmitterCORSPreflight Int<183> Request<15>) false))))
+          (match (rp_hd_location (rp_headers Response<2>))
+           (((SomeURL URL<56>)
+             (and (= (rq_url Request<0>) URL<56>)
+              (= (ft_emitter FetchEngine<0>) Emitter<0>)
+              (ite
+               (c_origin_header_on_cross_origin_redirect (config Global<0>))
+               (= (rq_hd_origin (rq_headers Request<0>))
+                (rq_hd_origin (rq_headers (ft_request FetchEngine<0>))))
+               (ite
+                (= (origin_of_url (rq_url Request<0>))
+                 (origin_of_url (rq_url (ft_request FetchEngine<0>))))
+                (= (rq_hd_origin (rq_headers Request<0>))
+                 (rq_hd_origin (rq_headers (ft_request FetchEngine<0>))))
+                (= (rq_hd_origin (rq_headers Request<0>)) NoneOrigin)))
+              (= (rq_hd_referer (rq_headers Request<0>)) NoneURL)
+              (= (rq_method Request<0>)
+               (rq_method (ft_request FetchEngine<0>)))
+              (= (rq_body Request<0>) (rq_body (ft_request FetchEngine<0>)))))
+            (NoneURL
+             (is_valid_emitter_request Emitter<0> Request<0> Window<0>
+              FetchEngine<0> Global<0>)))))))))
+     (NoneResponse
+      (is_valid_emitter_request Emitter<0> Request<0> Window<0>
+       FetchEngine<0> Global<0>))))
+   (match (url_protocol (rq_url Request<0>))
+    ((ProtocolHTTP
+      (= (rq_hd_cookie (rq_headers Request<0>))
+       (<map><closure4>optionSetCookieoptionCookieMapping Request<0>
+        Emitter<0> Window<0> ArrayoptionSetCookie<0>)))
+     (ProtocolHTTPS
+      (= (rq_hd_cookie (rq_headers Request<0>))
+       (<map><closure5>optionSetCookieoptionCookieMapping Request<0>
+        Emitter<0> Window<0> ArrayoptionSetCookie<0>)))
+     (ProtocolData
+      (and
+       (= (rq_hd_cookie (rq_headers Request<0>))
+        (constoptionCookieMapping NoneCookieMapping))
+       (= Emitter<0> EmitterClient)))
+     (ProtocolBlob
+      (and
+       (= (rq_hd_cookie (rq_headers Request<0>))
+        (constoptionCookieMapping NoneCookieMapping))
+       (= Emitter<0> EmitterClient)
+       (match (url_path (rq_url Request<0>))
+        (((url_path_data Int<779> Int<778>) false)
+         ((url_path_blob Origin<293> Int<777>)
+          (match (readoptionBlob ArrayoptionBlob<0> Int<777>)
+           (((SomeBlob Blob<0>)
+             (and (= (rq_url Request<0>) (blob_url Blob<0>))
+              (= (blob_origin Blob<0>) Origin<293>))) 
+            (NoneBlob false)))) ((url_path_res Path<238>) false)))))))
+   (= FetchEngine<1>
+    (Build_FetchEngine (+ Int<0> 1) Emitter<0> Request<0> Int<1> NoneResponse
+     (ft_history FetchEngine<0>))))
+  (Reachable Global<0>
+   (consEvent (EvRequest Emitter<0> Request<0> Int<1>) listEvent<0>)
+   (Build_State (+ Int<0> 1) FetchEngine<1> ServiceWorker<0> Window<1>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_request)
+
+(declare-var Int<4> Int)
+
+(declare-var Int<3> Int)
+
+(declare-var ArrayoptionSetCookie<2> ArrayoptionSetCookie)
+
+(declare-var ArrayoptionSetCookie<1> ArrayoptionSetCookie)
+
+(define-fun readResponse ((a ArrayResponse) (i Int)) Response
+ (ite (= i 0) (@0ArrayResponse a)
+  (ite (= i 1) (@1ArrayResponse a)
+   (ite (= i 2) (@2ArrayResponse a)
+    (ite (= i 3) (@3ArrayResponse a)
+     (ite (= i 4) (@4ArrayResponse a) (@defaultArrayResponse a)))))))
+
+(define-fun readRequest ((a ArrayRequest) (i Int)) Request
+ (ite (= i 0) (@0ArrayRequest a)
+  (ite (= i 1) (@1ArrayRequest a)
+   (ite (= i 2) (@2ArrayRequest a)
+    (ite (= i 3) (@3ArrayRequest a)
+     (ite (= i 4) (@4ArrayRequest a) (@defaultArrayRequest a)))))))
+
+(define-fun is_valid_fetch_response
+ ((FetchEngine<2> FetchEngine) (Response<1> Response) 
+ (Int<5> Int) (Window<2> Window)) Bool
+ (and (= (ft_response FetchEngine<2>) NoneResponse)
+  (= Int<5> (ft_correlator FetchEngine<2>))
+  (= (rp_url Response<1>) (rq_url (ft_request FetchEngine<2>)))
+  (match (rp_hd_access_control_allow_origin (rp_headers Response<1>))
+   (((SomeOrigin Origin<0>)
+     (match (ft_emitter FetchEngine<2>)
+      ((EmitterClient true)
+       ((EmitterScript NestedDOMPath<1> Script<0>)
+        (or
+         (= (SomeOrigin Origin<0>) (origin_of_url (wd_location Window<2>)))
+         (= (rp_content Response<1>) NoneContentElement)))
+       ((EmitterForm NestedDOMPath<0> Form<0>) true) 
+       (EmitterWorker true)
+       ((EmitterCORSPreflight Int<6> Request<0>)
+        (= (SomeOrigin Origin<0>) (origin_of_url (wd_location Window<2>)))))))
+    (NoneOrigin true)))))
+
+(define-fun readContentElement ((a ArrayContentElement) (i Int))
+ ContentElement
+ (ite (= i 0) (@0ArrayContentElement a)
+  (ite (= i 1) (@1ArrayContentElement a)
+   (ite (= i 2) (@2ArrayContentElement a)
+    (ite (= i 3) (@3ArrayContentElement a)
+     (ite (= i 4) (@4ArrayContentElement a) (@defaultArrayContentElement a)))))))
+
+(define-fun is_local_scheme ((URL<2> URL)) Bool
+ (match (url_protocol URL<2>)
+  ((ProtocolHTTP false) (ProtocolHTTPS false) (ProtocolData true)
+   (ProtocolBlob true))))
+
+(define-fun readInt ((a ArrayInt) (i Int)) Int
+ (ite (= i 0) (@0ArrayInt a)
+  (ite (= i 1) (@1ArrayInt a)
+   (ite (= i 2) (@2ArrayInt a)
+    (ite (= i 3) (@3ArrayInt a)
+     (ite (= i 4) (@4ArrayInt a) (@defaultArrayInt a)))))))
+
+(define-fun is_server_response
+ ((Global<1> Global) (Int<25> Int) (Response<2> Response)) Bool
+ (and
+  (not (is_local_scheme (rq_url (readRequest (requests Global<1>) Int<25>))))
+  (=
+   (readResponse (responses Global<1>)
+    (readInt (server_responses Global<1>) Int<25>)) Response<2>)))
+
+(define-fun writeoptionprodprodEmitterIntInt
+ ((a ArrayoptionprodprodEmitterIntInt) (i Int)
+ (e optionprodprodEmitterIntInt)) ArrayoptionprodprodEmitterIntInt
+ (ite (= i 0)
+  (Build_ArrayoptionprodprodEmitterIntInt e
+   (@1ArrayoptionprodprodEmitterIntInt a)
+   (@2ArrayoptionprodprodEmitterIntInt a)
+   (@3ArrayoptionprodprodEmitterIntInt a)
+   (@4ArrayoptionprodprodEmitterIntInt a)
+   (@defaultArrayoptionprodprodEmitterIntInt a))
+  (ite (= i 1)
+   (Build_ArrayoptionprodprodEmitterIntInt
+    (@0ArrayoptionprodprodEmitterIntInt a) e
+    (@2ArrayoptionprodprodEmitterIntInt a)
+    (@3ArrayoptionprodprodEmitterIntInt a)
+    (@4ArrayoptionprodprodEmitterIntInt a)
+    (@defaultArrayoptionprodprodEmitterIntInt a))
+   (ite (= i 2)
+    (Build_ArrayoptionprodprodEmitterIntInt
+     (@0ArrayoptionprodprodEmitterIntInt a)
+     (@1ArrayoptionprodprodEmitterIntInt a) e
+     (@3ArrayoptionprodprodEmitterIntInt a)
+     (@4ArrayoptionprodprodEmitterIntInt a)
+     (@defaultArrayoptionprodprodEmitterIntInt a))
+    (ite (= i 3)
+     (Build_ArrayoptionprodprodEmitterIntInt
+      (@0ArrayoptionprodprodEmitterIntInt a)
+      (@1ArrayoptionprodprodEmitterIntInt a)
+      (@2ArrayoptionprodprodEmitterIntInt a) e
+      (@4ArrayoptionprodprodEmitterIntInt a)
+      (@defaultArrayoptionprodprodEmitterIntInt a))
+     (ite (= i 4)
+      (Build_ArrayoptionprodprodEmitterIntInt
+       (@0ArrayoptionprodprodEmitterIntInt a)
+       (@1ArrayoptionprodprodEmitterIntInt a)
+       (@2ArrayoptionprodprodEmitterIntInt a)
+       (@3ArrayoptionprodprodEmitterIntInt a) e
+       (@defaultArrayoptionprodprodEmitterIntInt a)) a))))))
+
+(define-fun cookiejar_erase_cookie_mapfn
+ ((CookieName<3> CookieName) (Domain<16> Domain) (Path<10> Path)
+ (optionSetCookie<0> optionSetCookie)) optionSetCookie
+ (match optionSetCookie<0>
+  (((SomeSetCookie SetCookie<11>)
+    (ite
+     (andb
+      (andb (= (sc_name SetCookie<11>) CookieName<3>)
+       (= (sc_reg_domain SetCookie<11>) Domain<16>))
+      (= (sc_path SetCookie<11>) Path<10>)) NoneSetCookie
+     (SomeSetCookie SetCookie<11>))) (NoneSetCookie NoneSetCookie))))
+
+(define-fun <closure7>optionSetCookieoptionSetCookie
+ ((Domain<15> Domain) (CookieName<2> CookieName) (Path<9> Path)
+ (T<0> optionSetCookie)) optionSetCookie
+ (cookiejar_erase_cookie_mapfn CookieName<2> Domain<15> Path<9> T<0>))
+
+(define-fun <map><closure7>optionSetCookieoptionSetCookie
+ ((Domain<14> Domain) (CookieName<1> CookieName) (Path<8> Path)
+ (a ArrayoptionSetCookie)) ArrayoptionSetCookie
+ (Build_ArrayoptionSetCookie
+  (<closure7>optionSetCookieoptionSetCookie Domain<14> CookieName<1> Path<8>
+   (@0ArrayoptionSetCookie a))
+  (<closure7>optionSetCookieoptionSetCookie Domain<14> CookieName<1> Path<8>
+   (@1ArrayoptionSetCookie a))
+  (<closure7>optionSetCookieoptionSetCookie Domain<14> CookieName<1> Path<8>
+   (@2ArrayoptionSetCookie a))
+  (<closure7>optionSetCookieoptionSetCookie Domain<14> CookieName<1> Path<8>
+   (@3ArrayoptionSetCookie a))
+  (<closure7>optionSetCookieoptionSetCookie Domain<14> CookieName<1> Path<8>
+   (@4ArrayoptionSetCookie a))
+  (<closure7>optionSetCookieoptionSetCookie Domain<14> CookieName<1> Path<8>
+   (@defaultArrayoptionSetCookie a))))
+
+(define-fun cookiejar_erase_cookie
+ ((ArrayoptionSetCookie<3> ArrayoptionSetCookie) (CookieName<0> CookieName)
+ (Domain<13> Domain) (Path<7> Path)) ArrayoptionSetCookie
+ (<map><closure7>optionSetCookieoptionSetCookie Domain<13> CookieName<0>
+  Path<7> ArrayoptionSetCookie<3>))
+
+(define-fun writeoptionSetCookie
+ ((a ArrayoptionSetCookie) (i Int) (e optionSetCookie)) ArrayoptionSetCookie
+ (ite (= i 0)
+  (Build_ArrayoptionSetCookie e (@1ArrayoptionSetCookie a)
+   (@2ArrayoptionSetCookie a) (@3ArrayoptionSetCookie a)
+   (@4ArrayoptionSetCookie a) (@defaultArrayoptionSetCookie a))
+  (ite (= i 1)
+   (Build_ArrayoptionSetCookie (@0ArrayoptionSetCookie a) e
+    (@2ArrayoptionSetCookie a) (@3ArrayoptionSetCookie a)
+    (@4ArrayoptionSetCookie a) (@defaultArrayoptionSetCookie a))
+   (ite (= i 2)
+    (Build_ArrayoptionSetCookie (@0ArrayoptionSetCookie a)
+     (@1ArrayoptionSetCookie a) e (@3ArrayoptionSetCookie a)
+     (@4ArrayoptionSetCookie a) (@defaultArrayoptionSetCookie a))
+    (ite (= i 3)
+     (Build_ArrayoptionSetCookie (@0ArrayoptionSetCookie a)
+      (@1ArrayoptionSetCookie a) (@2ArrayoptionSetCookie a) e
+      (@4ArrayoptionSetCookie a) (@defaultArrayoptionSetCookie a))
+     (ite (= i 4)
+      (Build_ArrayoptionSetCookie (@0ArrayoptionSetCookie a)
+       (@1ArrayoptionSetCookie a) (@2ArrayoptionSetCookie a)
+       (@3ArrayoptionSetCookie a) e (@defaultArrayoptionSetCookie a)) a))))))
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<1> FetchEngine<1> ServiceWorker<0> Window<1>
+     ArrayoptionSetCookie<1> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (= Response<0> (readResponse (responses Global<0>) Int<2>))
+   (= (ft_request FetchEngine<1>) (readRequest (requests Global<0>) Int<4>))
+   (is_emitter_window_context Global<0> (ft_emitter FetchEngine<1>) Window<1>
+    Window<0>)
+   (is_valid_fetch_response FetchEngine<1> Response<0> Int<3> Window<0>)
+   (match (url_protocol (rp_url Response<0>))
+    ((ProtocolHTTP (is_server_response Global<0> Int<4> Response<0>))
+     (ProtocolHTTPS (is_server_response Global<0> Int<4> Response<0>))
+     (ProtocolData
+      (and (= (rp_code Response<0>) ResponseOk)
+       (= (rp_hd_access_control_allow_origin (rp_headers Response<0>))
+        NoneOrigin) (= (rp_hd_location (rp_headers Response<0>)) NoneURL)
+       (= (rp_hd_set_cookie (rp_headers Response<0>)) NoneSetCookie)
+       (match (url_path (rp_url Response<0>))
+        (((url_path_data Int<24> Int<23>)
+          (and
+           (= (rp_content Response<0>)
+            (SomeContentElement
+             (readContentElement (data_urls Global<0>) Int<23>)))
+           (= Int<24> Int<1>)))
+         ((url_path_blob Origin<6> Int<22>)
+          (match (readoptionBlob ArrayoptionBlob<0> Int<22>)
+           (((SomeBlob Blob<1>)
+             (and (= (rp_url Response<0>) (blob_url Blob<1>))
+              (= (blob_origin Blob<1>) Origin<6>)
+              (= (rp_content Response<0>)
+               (SomeContentElement (blob_celt Blob<1>))))) 
+            (NoneBlob false)))) ((url_path_res Path<5>) false)))))
+     (ProtocolBlob
+      (and (= (rp_code Response<0>) ResponseOk)
+       (= (rp_hd_access_control_allow_origin (rp_headers Response<0>))
+        NoneOrigin) (= (rp_hd_location (rp_headers Response<0>)) NoneURL)
+       (= (rp_hd_set_cookie (rp_headers Response<0>)) NoneSetCookie)
+       (match (url_path (rp_url Response<0>))
+        (((url_path_data Int<21> Int<20>)
+          (and
+           (= (rp_content Response<0>)
+            (SomeContentElement
+             (readContentElement (data_urls Global<0>) Int<20>)))
+           (= Int<21> Int<1>)))
+         ((url_path_blob Origin<5> Int<19>)
+          (match (readoptionBlob ArrayoptionBlob<0> Int<19>)
+           (((SomeBlob Blob<0>)
+             (and (= (rp_url Response<0>) (blob_url Blob<0>))
+              (= (blob_origin Blob<0>) Origin<5>)
+              (= (rp_content Response<0>)
+               (SomeContentElement (blob_celt Blob<0>))))) 
+            (NoneBlob false)))) ((url_path_res Path<4>) false)))))))
+   (= FetchEngine<0>
+    (Build_FetchEngine (+ Int<1> 1) (ft_emitter FetchEngine<1>)
+     (ft_request FetchEngine<1>) (ft_correlator FetchEngine<1>)
+     (SomeResponse Response<0>)
+     (writeoptionprodprodEmitterIntInt (ft_history FetchEngine<1>) Int<3>
+      (SomeprodprodEmitterIntInt
+       (pairprodEmitterIntInt
+        (pairEmitterInt (ft_emitter FetchEngine<1>) Int<4>) Int<2>)))))
+   (match (rp_hd_set_cookie (rp_headers Response<0>))
+    (((SomeSetCookie SetCookie<0>)
+      (and (is_valid_setcookie (rp_url Response<0>) SetCookie<0>)
+       (= ArrayoptionSetCookie<0>
+        (cookiejar_erase_cookie ArrayoptionSetCookie<1>
+         (sc_name SetCookie<0>) (sc_reg_domain SetCookie<0>)
+         (sc_path SetCookie<0>)))
+       (= (readoptionSetCookie ArrayoptionSetCookie<0> Int<0>) NoneSetCookie)
+       (= ArrayoptionSetCookie<2>
+        (writeoptionSetCookie ArrayoptionSetCookie<0> Int<0>
+         (SomeSetCookie SetCookie<0>)))))
+     (NoneSetCookie (= ArrayoptionSetCookie<2> ArrayoptionSetCookie<1>)))))
+  (Reachable Global<0>
+   (consEvent (EvResponse Response<0> Int<3>) listEvent<0>)
+   (Build_State (+ Int<1> 1) FetchEngine<0> ServiceWorker<0> Window<1>
+    ArrayoptionSetCookie<2> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_response)
+
+(declare-var ArrayoptionBlob<1> ArrayoptionBlob)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<0> FetchEngine<0> ServiceWorker<0> Window<1>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (ite (c_origin_wide_csp (config Global<0>))
+    (match (readprodOriginoptionCSP (origin_csp Global<0>) Int<1>)
+     (((pairOriginoptionCSP Origin<0> optionCSP<0>)
+       (match (origin_of_url (rp_url Response<0>))
+        (((SomeOrigin Origin<3>)
+          (and (= Origin<0> Origin<3>)
+           (= (rp_hd_csp (rp_headers Response<0>)) optionCSP<0>)))
+         (NoneOrigin false)))))) true)
+   (update_window_on_response Global<0> Int<0> FetchEngine<0>
+    ArrayoptionBlob<0> Response<0> NestedDOMPath<0> Window<1> Window<0>)
+   (match NestedDOMPath<0>
+    (((DOMPath listInt<0> DOMSelector<0>)
+      (match DOMSelector<0>
+       ((DOMTopLevel (= ArrayoptionBlob<1> (constoptionBlob NoneBlob)))
+        ((DOMIndex Int<8>) (= ArrayoptionBlob<1> ArrayoptionBlob<0>))))))))
+  (Reachable Global<0>
+   (consEvent (EvDOMUpdate NestedDOMPath<0>) listEvent<0>)
+   (Build_State (+ Int<0> 1) FetchEngine<0> ServiceWorker<0> Window<0>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<1> ArrayoptionStorageItem<0>)))
+ Event_dom_update)
+
+(declare-var Window<5> Window)
+
+(rule
+ (=>
+  (and (Reachable Global<0> listEvent<0> State<0>)
+   (= State<0>
+    (Build_State Int<0> FetchEngine<0> ServiceWorker<0> Window<4>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (is_script_in_dom_path Global<0> Window<4> NestedDOMPath<1> Script<0>
+    Window<5>)
+   (window_ctx_of_dom_path Global<0> Window<4> NestedDOMPath<0> Window<2>)
+   (match (rp_hd_csp (dc_headers (wd_document Window<2>)))
+    (((SomeCSP CSP<0>)
+      (match (csp_trusted_types CSP<0>)
+       (((SomeTrustedTypes TrustedTypes<0>)
+         (ite (tt_require_for_script TrustedTypes<0>)
+          (ite (c_restrict_tt_to_secure_contexts (config Global<0>))
+           (or
+            (and (is_secure_context Global<0> Window<4> NestedDOMPath<0>)
+             (Scriptstate Global<0> State<0> Script<0>
+              (SOTrustedHTML Window<0> HTMLElement<0>)))
+            (is_not_secure_context Global<0> Window<4> NestedDOMPath<0>))
+           (Scriptstate Global<0> State<0> Script<0>
+            (SOTrustedHTML Window<0> HTMLElement<0>))) true))
+        (NoneTrustedTypes true)))) (NoneCSP true)))
+   (ite (c_tt_strict_realm_check (config Global<0>)) 
+    (= Window<0> Window<2>) true)
+   (update_window_html_from_ctx Global<0> Int<0> Window<5> HTMLElement<0>
+    NestedDOMPath<0> Window<4> Window<1>)
+   (update_html_req_initiator Global<0> Int<0> NoneInt NestedDOMPath<0>
+    Window<1> Window<3>))
+  (Reachable Global<0>
+   (consEvent
+    (EvScriptUpdateHTML NestedDOMPath<1> NestedDOMPath<0> Window<2>)
+    listEvent<0>)
+   (Build_State (+ Int<0> 1) FetchEngine<0> ServiceWorker<0> Window<3>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_dom_update)
+
+(declare-var URL<0> URL)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<2> FetchEngine<0> ServiceWorker<0> Window<4>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (is_script_in_dom_path Global<0> Window<4> NestedDOMPath<1> Script<0>
+    Window<2>)
+   (window_ctx_of_dom_path Global<0> Window<4> NestedDOMPath<0> Window<1>)
+   (= NestedDOMPath<0> (DOMPath listInt<0> (DOMIndex Int<1>)))
+   (is_frame_at_page_index (dc_dom (wd_document Window<1>)) Int<1> Frame<0>
+    HTML<0>)
+   (update_window_html_from_ctx Global<0> Int<2> Window<1> 
+    (HTMLFrame URL<0>) NestedDOMPath<0> Window<4> Window<0>)
+   (= (readWindow (windows Global<0>) Int<0>) Window<2>)
+   (update_html_req_initiator Global<0> Int<2> (SomeInt Int<0>)
+    NestedDOMPath<0> Window<0> Window<3>))
+  (Reachable Global<0>
+   (consEvent
+    (EvScriptNavigateFrame NestedDOMPath<1> NestedDOMPath<0> Frame<0> URL<0>)
+    listEvent<0>)
+   (Build_State (+ Int<2> 1) FetchEngine<0> ServiceWorker<0> Window<3>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_navigate_frame)
+
+(declare-var optionURL<0> optionURL)
+
+(declare-var Script<1> Script)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<0> FetchEngine<0> ServiceWorker<0> Window<2>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (is_script_in_dom_path Global<0> Window<2> NestedDOMPath<1> Script<0>
+    Window<1>)
+   (is_script_in_dom_path Global<0> Window<2> NestedDOMPath<0> Script<1>
+    Window<0>)
+   (match optionURL<0>
+    (((SomeURL URL<0>)
+      (= (origin_of_url URL<0>) (origin_of_url (wd_location Window<0>))))
+     (NoneURL true))))
+  (Reachable Global<0>
+   (consEvent
+    (EvScriptPostMessage NestedDOMPath<1> NestedDOMPath<0> optionURL<0>)
+    listEvent<0>)
+   (Build_State (+ Int<0> 1) FetchEngine<0> ServiceWorker<0> Window<2>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_post_message)
+
+(declare-var Domain<0> Domain)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<0> FetchEngine<0> ServiceWorker<0> Window<2>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (is_true (c_domain_relaxation (config Global<0>)))
+   (is_script_in_dom_path Global<0> Window<2> NestedDOMPath<0> Script<0>
+    Window<1>)
+   (match (url_host (wd_location Window<1>))
+    (((SomeDomain Domain<1>) (is_eq_or_subdomain Domain<1> Domain<0>))
+     (NoneDomain false)))
+   (update_window_domain_from_ctx Global<0> Int<0> Window<1>
+    (SomeDomain Domain<0>) NestedDOMPath<0> Window<2> Window<0>))
+  (Reachable Global<0>
+   (consEvent (EvScriptDomainRelaxation NestedDOMPath<0> Domain<0>)
+    listEvent<0>)
+   (Build_State (+ Int<0> 1) FetchEngine<0> ServiceWorker<0> Window<0>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_domain_relaxation)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<1> FetchEngine<1> ServiceWorker<0> Window<0>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (not (= (ft_emitter FetchEngine<1>) EmitterWorker))
+   (not (is_local_scheme (rq_url (ft_request FetchEngine<1>))))
+   (= (ft_request FetchEngine<1>) (readRequest (requests Global<0>) Int<0>))
+   (= (ft_response FetchEngine<1>) NoneResponse)
+   (= (readoptionInt (wk_cache ServiceWorker<0>) Int<0>) (SomeInt Int<2>))
+   (is_valid_fetch_response FetchEngine<1>
+    (readResponse (responses Global<0>) Int<2>)
+    (ft_correlator FetchEngine<1>) Window<0>)
+   (= FetchEngine<0>
+    (Build_FetchEngine (+ Int<1> 1) (ft_emitter FetchEngine<1>)
+     (ft_request FetchEngine<1>) (ft_correlator FetchEngine<1>)
+     (SomeResponse (readResponse (responses Global<0>) Int<2>))
+     (writeoptionprodprodEmitterIntInt (ft_history FetchEngine<1>)
+      (ft_correlator FetchEngine<1>)
+      (SomeprodprodEmitterIntInt
+       (pairprodEmitterIntInt
+        (pairEmitterInt (ft_emitter FetchEngine<1>) Int<0>) Int<2>))))))
+  (Reachable Global<0> (consEvent (EvWorkerCacheMatch Int<2>) listEvent<0>)
+   (Build_State (+ Int<1> 1) FetchEngine<0> ServiceWorker<0> Window<0>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_worker_cache_match)
+
+(declare-var ServiceWorker<1> ServiceWorker)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<2> FetchEngine<0> ServiceWorker<0> Window<0>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (ite (c_worker_allow_synthetic_responses (config Global<0>))
+    (not
+     (is_local_scheme (rp_url (readResponse (responses Global<0>) Int<0>))))
+    (and (not (is_local_scheme (rq_url (ft_request FetchEngine<0>))))
+     (= (ft_request FetchEngine<0>)
+      (readRequest (requests Global<0>) Int<1>))
+     (= (ft_response FetchEngine<0>)
+      (SomeResponse (readResponse (responses Global<0>) Int<0>)))))
+   (= ServiceWorker<1>
+    (Build_ServiceWorker (+ Int<2> 1)
+     (writeoptionInt (wk_cache ServiceWorker<0>) Int<1> (SomeInt Int<0>)))))
+  (Reachable Global<0>
+   (consEvent (EvWorkerUpdateCache Int<1> Int<0>) listEvent<0>)
+   (Build_State (+ Int<2> 1) FetchEngine<0> ServiceWorker<1> Window<0>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_worker_update_cache)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<1> FetchEngine<0> ServiceWorker<0> Window<1>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (is_true (c_script_update_cache (config Global<0>)))
+   (not (is_local_scheme (rp_url Response<0>)))
+   (match optionInt<0>
+    (((SomeInt Int<2>)
+      (and (= (readResponse (responses Global<0>) Int<2>) Response<0>)
+       (= (rq_url (readRequest (requests Global<0>) Int<0>))
+        (rp_url Response<0>)))) (NoneInt true)))
+   (is_script_in_dom_path Global<0> Window<1> NestedDOMPath<0> Script<0>
+    Window<0>)
+   (= ServiceWorker<1>
+    (Build_ServiceWorker (+ Int<1> 1)
+     (writeoptionInt (wk_cache ServiceWorker<0>) Int<0> optionInt<0>))))
+  (Reachable Global<0>
+   (consEvent (EvScriptUpdateCache NestedDOMPath<0> Int<0> optionInt<0>)
+    listEvent<0>)
+   (Build_State (+ Int<1> 1) FetchEngine<0> ServiceWorker<1> Window<1>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_update_cache)
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<1> FetchEngine<0> ServiceWorker<0> Window<1>
+     ArrayoptionSetCookie<2> ArrayoptionBlob<0> ArrayoptionStorageItem<0>))
+   (is_script_in_dom_path Global<0> Window<1> NestedDOMPath<1> Script<0>
+    Window<0>)
+   (is_valid_setcookie_from_ctx Global<0> Int<1> Window<0> SetCookie<0>
+    Window<1> NestedDOMPath<0>) (= (sc_http_only SetCookie<0>) false)
+   (= ArrayoptionSetCookie<0>
+    (cookiejar_erase_cookie ArrayoptionSetCookie<2> 
+     (sc_name SetCookie<0>) (sc_reg_domain SetCookie<0>)
+     (sc_path SetCookie<0>)))
+   (= (readoptionSetCookie ArrayoptionSetCookie<0> Int<0>) NoneSetCookie)
+   (= ArrayoptionSetCookie<1>
+    (writeoptionSetCookie ArrayoptionSetCookie<0> Int<0>
+     (SomeSetCookie SetCookie<0>))))
+  (Reachable Global<0>
+   (consEvent
+    (EvScriptSetCookie NestedDOMPath<1> NestedDOMPath<0> Int<0> SetCookie<0>)
+    listEvent<0>)
+   (Build_State (+ Int<1> 1) FetchEngine<0> ServiceWorker<0> Window<1>
+    ArrayoptionSetCookie<1> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_set_cookie)
+
+(declare-var Blob<0> Blob)
+
+(define-fun writeoptionBlob ((a ArrayoptionBlob) (i Int) (e optionBlob))
+ ArrayoptionBlob
+ (ite (= i 0)
+  (Build_ArrayoptionBlob e (@1ArrayoptionBlob a) (@2ArrayoptionBlob a)
+   (@3ArrayoptionBlob a) (@4ArrayoptionBlob a) (@defaultArrayoptionBlob a))
+  (ite (= i 1)
+   (Build_ArrayoptionBlob (@0ArrayoptionBlob a) e 
+    (@2ArrayoptionBlob a) (@3ArrayoptionBlob a) (@4ArrayoptionBlob a)
+    (@defaultArrayoptionBlob a))
+   (ite (= i 2)
+    (Build_ArrayoptionBlob (@0ArrayoptionBlob a) (@1ArrayoptionBlob a) e
+     (@3ArrayoptionBlob a) (@4ArrayoptionBlob a) (@defaultArrayoptionBlob a))
+    (ite (= i 3)
+     (Build_ArrayoptionBlob (@0ArrayoptionBlob a) 
+      (@1ArrayoptionBlob a) (@2ArrayoptionBlob a) e 
+      (@4ArrayoptionBlob a) (@defaultArrayoptionBlob a))
+     (ite (= i 4)
+      (Build_ArrayoptionBlob (@0ArrayoptionBlob a) 
+       (@1ArrayoptionBlob a) (@2ArrayoptionBlob a) 
+       (@3ArrayoptionBlob a) e (@defaultArrayoptionBlob a)) a))))))
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<1> FetchEngine<0> ServiceWorker<0> Window<0>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<1> ArrayoptionStorageItem<0>))
+   (is_script_in_dom_path Global<0> Window<0> NestedDOMPath<0> Script<0>
+    Window<1>) (= (blob_url Blob<0>) URL<0>)
+   (= (SomeOrigin (blob_origin Blob<0>))
+    (origin_of_url (wd_location Window<1>)))
+   (ite (c_csp_inherit_blob_from_creator (config Global<0>))
+    (= (blob_csp Blob<0>) (rp_hd_csp (dc_headers (wd_document Window<1>))))
+    true) (is_valid_url URL<0>)
+   (match (url_path URL<0>)
+    (((url_path_data Int<26> Int<25>) false)
+     ((url_path_blob Origin<6> Int<24>)
+      (and (= Origin<6> (blob_origin Blob<0>)) (= Int<24> Int<0>)))
+     ((url_path_res Path<6>) false)))
+   (= (readoptionBlob ArrayoptionBlob<1> Int<0>) NoneBlob)
+   (= ArrayoptionBlob<0>
+    (writeoptionBlob ArrayoptionBlob<1> Int<0> (SomeBlob Blob<0>))))
+  (Reachable Global<0>
+   (consEvent (EvScriptCreateBlobUrl NestedDOMPath<0> URL<0>) listEvent<0>)
+   (Build_State (+ Int<1> 1) FetchEngine<0> ServiceWorker<0> Window<0>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_create_blob_url)
+
+(declare-var ArrayoptionStorageItem<2> ArrayoptionStorageItem)
+
+(declare-var ArrayoptionStorageItem<1> ArrayoptionStorageItem)
+
+(define-fun <closure15>optionStorageItemoptionStorageItem
+ ((Origin<4> Origin) (StorageItem<2> StorageItem) (T<0> optionStorageItem))
+ optionStorageItem
+ (match T<0>
+  (((SomeStorageItem StorageItem<3>)
+    (ite
+     (andb (= (si_origin StorageItem<3>) Origin<4>)
+      (= (si_name StorageItem<3>) (si_name StorageItem<2>))) NoneStorageItem
+     (SomeStorageItem StorageItem<3>))) (NoneStorageItem NoneStorageItem))))
+
+(define-fun <map><closure15>optionStorageItemoptionStorageItem
+ ((Origin<3> Origin) (StorageItem<1> StorageItem) (a ArrayoptionStorageItem))
+ ArrayoptionStorageItem
+ (Build_ArrayoptionStorageItem
+  (<closure15>optionStorageItemoptionStorageItem Origin<3> StorageItem<1>
+   (@0ArrayoptionStorageItem a))
+  (<closure15>optionStorageItemoptionStorageItem Origin<3> StorageItem<1>
+   (@1ArrayoptionStorageItem a))
+  (<closure15>optionStorageItemoptionStorageItem Origin<3> StorageItem<1>
+   (@2ArrayoptionStorageItem a))
+  (<closure15>optionStorageItemoptionStorageItem Origin<3> StorageItem<1>
+   (@3ArrayoptionStorageItem a))
+  (<closure15>optionStorageItemoptionStorageItem Origin<3> StorageItem<1>
+   (@4ArrayoptionStorageItem a))
+  (<closure15>optionStorageItemoptionStorageItem Origin<3> StorageItem<1>
+   (@defaultArrayoptionStorageItem a))))
+
+(define-fun writeoptionStorageItem
+ ((a ArrayoptionStorageItem) (i Int) (e optionStorageItem))
+ ArrayoptionStorageItem
+ (ite (= i 0)
+  (Build_ArrayoptionStorageItem e (@1ArrayoptionStorageItem a)
+   (@2ArrayoptionStorageItem a) (@3ArrayoptionStorageItem a)
+   (@4ArrayoptionStorageItem a) (@defaultArrayoptionStorageItem a))
+  (ite (= i 1)
+   (Build_ArrayoptionStorageItem (@0ArrayoptionStorageItem a) e
+    (@2ArrayoptionStorageItem a) (@3ArrayoptionStorageItem a)
+    (@4ArrayoptionStorageItem a) (@defaultArrayoptionStorageItem a))
+   (ite (= i 2)
+    (Build_ArrayoptionStorageItem (@0ArrayoptionStorageItem a)
+     (@1ArrayoptionStorageItem a) e (@3ArrayoptionStorageItem a)
+     (@4ArrayoptionStorageItem a) (@defaultArrayoptionStorageItem a))
+    (ite (= i 3)
+     (Build_ArrayoptionStorageItem (@0ArrayoptionStorageItem a)
+      (@1ArrayoptionStorageItem a) (@2ArrayoptionStorageItem a) e
+      (@4ArrayoptionStorageItem a) (@defaultArrayoptionStorageItem a))
+     (ite (= i 4)
+      (Build_ArrayoptionStorageItem (@0ArrayoptionStorageItem a)
+       (@1ArrayoptionStorageItem a) (@2ArrayoptionStorageItem a)
+       (@3ArrayoptionStorageItem a) e (@defaultArrayoptionStorageItem a)) a))))))
+
+(rule
+ (=>
+  (and
+   (Reachable Global<0> listEvent<0>
+    (Build_State Int<0> FetchEngine<0> ServiceWorker<0> Window<1>
+     ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<2>))
+   (is_script_in_dom_path Global<0> Window<1> NestedDOMPath<0> Script<0>
+    Window<0>)
+   (= (origin_of_url (wd_location Window<0>)) (SomeOrigin Origin<0>))
+   (= (si_origin StorageItem<0>) Origin<0>)
+   (= ArrayoptionStorageItem<1>
+    (<map><closure15>optionStorageItemoptionStorageItem Origin<0>
+     StorageItem<0> ArrayoptionStorageItem<2>))
+   (= ArrayoptionStorageItem<0>
+    (writeoptionStorageItem ArrayoptionStorageItem<1> Int<1>
+     (SomeStorageItem StorageItem<0>))))
+  (Reachable Global<0>
+   (consEvent
+    (EvScriptStorageSetItem NestedDOMPath<0> Origin<0>
+     (si_name StorageItem<0>) (si_value StorageItem<0>)) listEvent<0>)
+   (Build_State (+ Int<0> 1) FetchEngine<0> ServiceWorker<0> Window<1>
+    ArrayoptionSetCookie<0> ArrayoptionBlob<0> ArrayoptionStorageItem<0>)))
+ Event_script_storage_set_item)
+
+(declare-rel SOPQuery (Global listEvent State))
+
+(rule
+ (=>
+  (and (Reachable Global<0> listEvent<1> State<0>)
+   (= listEvent<1>
+    (consEvent (EvRequest Emitter<0> Request<0> Int<0>) listEvent<0>))
+   (not (is_cors_simple_request Request<0>))
+   (is_cross_origin_request (st_window State<0>) Request<0>)
+   (all_list Request<0> listEvent<0>)
+   (match Emitter<0>
+    ((EmitterClient false) ((EmitterScript NestedDOMPath<1> Script<0>) false)
+     ((EmitterForm NestedDOMPath<0> Form<0>) true) 
+     (EmitterWorker false) ((EmitterCORSPreflight Int<19> Request<3>) false)))
+   (= (c_worker_allow_synthetic_responses (config Global<0>)) false)
+   (= (c_script_update_cache (config Global<0>)) false))
+  (SOPQuery Global<0> listEvent<1> State<0>)) Query_state)
+
+(query SOPQuery)
+

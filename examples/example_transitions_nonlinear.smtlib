@@ -1,0 +1,117 @@
+(declare-datatype optionInt ((SomeInt (@0SomeInt Int)) (NoneInt )))
+
+(declare-datatype ResponseCode ((ResponseOk ) (ResponseError )))
+
+(declare-datatype URL ((Build_URL (proto Int) (host Int) (path Int))))
+
+(declare-datatype Response
+ ((Build_Response (rp_url URL) (rp_code ResponseCode) (rp_content optionInt))))
+
+(declare-datatype Request ((Build_Request (rq_url URL) (rq_body optionInt))))
+
+(declare-datatype Event
+ ((EvInit ) (EvRequest (@0EvRequest Request))
+  (EvResponse (@0EvResponse Response)) (EvDOMUpdate (@0EvDOMUpdate Int))))
+
+(declare-var Event<1> Event)
+
+(declare-var Event<0> Event)
+
+(declare-datatype listEvent
+ ((nilEvent ) (consEvent (@0consEvent Event) (@1consEvent listEvent))))
+
+(declare-var listEvent<1> listEvent)
+
+(declare-var listEvent<0> listEvent)
+
+(declare-rel in_list (Event listEvent))
+
+(rule
+ (=>
+  (and (= listEvent<1> (consEvent Event<0> listEvent<0>))
+   (or (= Event<0> Event<1>) (in_list Event<1> listEvent<0>)))
+  (in_list Event<1> listEvent<1>)) InList_rec)
+
+(declare-datatype optionResponse
+ ((SomeResponse (@0SomeResponse Response)) (NoneResponse )))
+
+(declare-datatype State
+ ((Build_State
+   (st_version Int) (st_req Request) (st_rep optionResponse)
+   (st_dom optionInt))))
+
+(declare-rel Reachable (listEvent State))
+
+(define-fun initial_state () State
+ (Build_State 0 (Build_Request (Build_URL 0 0 0) NoneInt) NoneResponse
+  NoneInt))
+
+(rule (Reachable nilEvent initial_state) Initial_state_is_reachable)
+
+(declare-var optionInt<0> optionInt)
+
+(declare-var Request<1> Request)
+
+(declare-var Int<0> Int)
+
+(declare-var optionResponse<0> optionResponse)
+
+(declare-var Request<0> Request)
+
+(rule
+ (=>
+  (Reachable listEvent<0>
+   (Build_State Int<0> Request<0> optionResponse<0> optionInt<0>))
+  (Reachable (consEvent (EvRequest Request<1>) listEvent<0>)
+   (Build_State (+ Int<0> 1) Request<1> NoneResponse optionInt<0>)))
+ Event_Request)
+
+(declare-var Response<0> Response)
+
+(rule
+ (=>
+  (and
+   (Reachable listEvent<0>
+    (Build_State Int<0> Request<0> optionResponse<0> optionInt<0>))
+   (= optionResponse<0> NoneResponse)
+   (= (rp_url Response<0>) (rq_url Request<0>)))
+  (Reachable (consEvent (EvResponse Response<0>) listEvent<0>)
+   (Build_State (+ Int<0> 1) Request<0> (SomeResponse Response<0>)
+    optionInt<0>))) Event_Response)
+
+(declare-var Int<1> Int)
+
+(rule
+ (=>
+  (and
+   (Reachable listEvent<0>
+    (Build_State Int<1> Request<0> optionResponse<0> optionInt<0>))
+   (match optionResponse<0>
+    (((SomeResponse Response<0>)
+      (and (= (rp_code Response<0>) ResponseOk)
+       (match (rp_content Response<0>)
+        (((SomeInt Int<2>) (= Int<0> Int<2>)) (NoneInt false)))))
+     (NoneResponse false))))
+  (Reachable (consEvent (EvDOMUpdate Int<0>) listEvent<0>)
+   (Build_State (+ Int<1> 1) Request<0> optionResponse<0> (SomeInt Int<0>))))
+ Event_Dom_Update)
+
+(declare-var Response<1> Response)
+
+(declare-var State<0> State)
+
+(declare-rel DOMQuery (listEvent State))
+
+(rule
+ (=>
+  (and (Reachable listEvent<0> State<0>)
+   (= (st_rep State<0>) (SomeResponse Response<0>))
+   (not (= (host (rp_url Response<0>)) 0))
+   (= (st_dom State<0>) (SomeInt Int<0>))
+   (= (rp_content Response<0>) (SomeInt Int<0>))
+   (in_list (EvResponse Response<1>) listEvent<0>)
+   (not (= (rp_content Response<1>) (rp_content Response<0>))))
+  (DOMQuery listEvent<0> State<0>)) Query_state)
+
+(query DOMQuery)
+
