@@ -16,6 +16,7 @@ def get_vars(exp):
         s = s.union(get_vars(c))
     return s
 
+
 def get_uninterpreted_calls(exp):
     if z3.is_app_of(exp, z3.Z3_OP_UNINTERPRETED):
         if exp.num_args() == 0: return set() # Consts are 0 args uninterpreted calls :/
@@ -24,6 +25,7 @@ def get_uninterpreted_calls(exp):
     for c in exp.children():
         s = s.union(get_uninterpreted_calls(c))
     return s
+
 
 def random_string(length=12):
     return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length))
@@ -46,7 +48,6 @@ class BMC(abc.ABC):
         if z3.is_implies(r):
             head, tail = r.arg(1), r.arg(0)
         return head, tail
-
 
 
 class LinearBMC(BMC):
@@ -86,7 +87,6 @@ class LinearBMC(BMC):
     def mk_pred(pred, level):
         name = pred if isinstance(pred, str) else pred.decl().name()
         return  z3.Const(f"{name}#{level}", z3.BoolSort())
-
 
     def compile(self, level):
         rule_names = collections.defaultdict(lambda: [])
@@ -197,9 +197,8 @@ class NonlinearBMC(BMC):
         # One unrolling step for everything
         for c_lit in core:
             if z3.is_not(c_lit):
-                c_path = c_lit.arg(0).decl().name().split("#")[1]
-                pt_level = c_path.split('_')
-                if len(pt_level) == 1:
+                ul = self.get_rl_unrolling_level(c_lit.arg(0))
+                if (ul == 0):
                     lits_to_unroll.append(c_lit)
         # If everything has already been unrolled at least once
         # choose a random literal
@@ -208,6 +207,21 @@ class NonlinearBMC(BMC):
             lits_to_unroll.append(lit)
         return lits_to_unroll
 
+    def get_rl_unrolling_level(self, lit):
+        # Get the unrolling level from the path
+        c_path = lit.decl().name().split("#")[1]
+        pt_level = c_path.split('_')
+        if len(pt_level) == 1:
+            return 0
+        return int(pt_level[1])
+
+    def mk_rec_call_path(self, rl_path):
+        # Store unrolling depth in the path
+        rl_path_parts = rl_path.split('_')
+        if len(rl_path_parts) == 1:
+            return f'{rl_path}_1'
+        rnd, lvl = rl_path_parts
+        return f'{rnd}_{int(lvl)+1}'
 
     def expand_literal(self, lit):
         new_calls = set()
@@ -215,14 +229,7 @@ class NonlinearBMC(BMC):
         self.log("Expanding:", rl_call)
         args = LinearBMC.mk_args(rl_call, rl_path)
         r_conjs = [ exp == arg for exp, arg in args ]
-
-        # Store unrolling depth in the path
-        rl_path_parts = rl_path.split('_')
-        if len(rl_path_parts) == 1:
-            rl_path_rec = f'{rl_path}_1'
-        else:
-            rnd, lvl = rl_path_parts
-            rl_path_rec = f'{rnd}_{int(lvl)+1}'
+        rl_path_rec =self.mk_rec_call_path(rl_path)
 
         rules = []
         for r_idx, r in enumerate(self.rule_groups[rl_call.decl().name()]):
@@ -243,10 +250,13 @@ class NonlinearBMC(BMC):
             conjs.extend( [ exp == arg_sym for exp, arg_sym in rule_args ] )
             rule_body = z3.substitute(rule_body, rule_args)
 
+            rec_call = False
             for c in get_uninterpreted_calls(rule_body):
-                rl_path_c = rl_path_rec
-                if rl_call.decl().name() != c.decl().name():
-                    rl_path_c = random_string(12)
+                rl_path_c = random_string(12)
+                if rl_call.decl().name() == c.decl().name() and not rec_call:
+                    # reuse the path only for the frst recursive call
+                    rec_call = True
+                    rl_path_c = rl_path_rec
                 args = [ exp == sym for exp,sym in LinearBMC.mk_args(c, rl_path_c) ]
                 pred = self.mk_reachability_literal(c, rl_path_c)
                 new_calls.add(pred)
@@ -257,7 +267,6 @@ class NonlinearBMC(BMC):
         self._assert(z3.Implies(lit, z3.And(z3.And(*r_conjs), z3.Or(*rules))))
 
         return new_calls
-
 
     def query(self, query):
 
@@ -285,7 +294,6 @@ class NonlinearBMC(BMC):
                 literals.remove(lit)
                 new_calls = self.expand_literal(lit)
                 literals = literals.union(new_calls)
-
 
     def get_answer(self):
         assert self.__sat_res
