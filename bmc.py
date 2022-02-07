@@ -197,8 +197,7 @@ class NonlinearBMC(BMC):
         # One unrolling step for everything
         for c_lit in core:
             if z3.is_not(c_lit):
-                ul = self.get_rl_unrolling_level(c_lit.arg(0))
-                if (ul == 0):
+                if self.get_rl_unrolling_level(c_lit.arg(0)) == 0:
                     lits_to_unroll.append(c_lit)
         # If everything has already been unrolled at least once
         # choose a random literal
