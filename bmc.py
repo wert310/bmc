@@ -228,7 +228,7 @@ class NonlinearBMC(BMC):
         self.log("Expanding:", rl_call)
         args = LinearBMC.mk_args(rl_call, rl_path)
         r_conjs = [ exp == arg for exp, arg in args ]
-        rl_path_rec =self.mk_rec_call_path(rl_path)
+        rl_path_rec = self.mk_rec_call_path(rl_path)
 
         rules = []
         for r_idx, r in enumerate(self.rule_groups[rl_call.decl().name()]):
