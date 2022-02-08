@@ -296,6 +296,7 @@ class NonlinearBMC(BMC):
 
     def get_answer(self):
         assert self.__sat_res
+        # TODO: return hyper-res answer
         _, args = self.__sat_res
         m = self.solver.model()
         return [ (arg, m[arg]) for _, arg in args ]
