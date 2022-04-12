@@ -251,6 +251,8 @@ class NonlinearBMC(BMC):
 
             rec_call = False
             for c in get_uninterpreted_calls(rule_body):
+                if c.decl().name() not in self.rule_groups:
+                    continue # skip uninterpreted functions that are not predicates
                 rl_path_c = random_string(12)
                 if rl_call.decl().name() == c.decl().name() and not rec_call:
                     # reuse the path only for the frst recursive call
