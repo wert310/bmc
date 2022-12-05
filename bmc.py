@@ -8,6 +8,7 @@ import random
 import string
 import z3
 
+z3.set_param(proof=True)
 
 def get_vars(exp):
     if z3.is_var(exp): return set([exp])
@@ -158,7 +159,7 @@ class NonlinearBMC(BMC):
         self.verbose = verbose
         self.simplify = simplify
         z3.set_param(verbose="1" if verbose else "0")
-        self.solver.set(':core.minimize', True)
+        # self.solver.set(':core.minimize', True)
         self.reachability_literals = {} # rl -> call
         self.calls = {} # call -> rl, path
 
@@ -226,8 +227,6 @@ class NonlinearBMC(BMC):
         new_calls = set()
         rl_call, rl_path = self.calls[lit]
         self.log("Expanding:", rl_call)
-        args = LinearBMC.mk_args(rl_call, rl_path)
-        r_conjs = [ exp == arg for exp, arg in args ]
         rl_path_rec = self.mk_rec_call_path(rl_path)
 
         rules = []
@@ -265,7 +264,7 @@ class NonlinearBMC(BMC):
 
             self._assert(z3.Implies(level_rule_i, z3.And(z3.And(*conjs), rule_body)))
 
-        self._assert(z3.Implies(lit, z3.And(z3.And(*r_conjs), z3.Or(*rules))))
+        self._assert(z3.Implies(lit, z3.Or(*rules)))
 
         return new_calls
 
@@ -276,6 +275,12 @@ class NonlinearBMC(BMC):
         q_lit = self.mk_reachability_literal(query, 'query')
         literals = set([ q_lit ]) # tracks reachability literals of calls
 
+        # Query parameters
+        q_call, q_path = self.calls[q_lit]
+        q_args = LinearBMC.mk_args(q_call, q_path)
+        q_conjs = [ exp == arg for exp, arg in q_args ]
+        self._assert(q_conjs)
+
         for iter_n in itertools.count():
             assumptions = [ q_lit ] + [ z3.Not(l) for l in literals ]
             self.log(f'Check-sat with:', assumptions)
@@ -285,6 +290,7 @@ class NonlinearBMC(BMC):
                 return res
             core = self.solver.unsat_core()
             if len(core) <= 1:
+                self.log(self.solver.proof().sexpr())
                 return z3.unsat
 
             self.log(f"Core #{iter_n}:", core)
@@ -326,7 +332,8 @@ if __name__ == '__main__':
     for q in queries:
         bmc = solver(rules, verbose=args.verbose)
         res = bmc.query(q)
+        print(res)
         if res == z3.sat:
             ans = bmc.get_answer()
-            print(q.decl().name())
+            print(f'{q.decl().name()}/{q.num_args()}')
             print('\n'.join(f'{arg} := {val}' for arg, val in ans))
