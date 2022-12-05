@@ -227,10 +227,12 @@ class NonlinearBMC(BMC):
         new_calls = set()
         rl_call, rl_path = self.calls[lit]
         self.log("Expanding:", rl_call)
-        rl_path_rec = self.mk_rec_call_path(rl_path)
+        # rl_path_rec = self.mk_rec_call_path(rl_path)
+        rl_path_rec = (( self.mk_rec_call_path(rl_path) if i == 0 else random_string(12) for i in itertools.count() ))
 
         rules = []
         for r_idx, r in enumerate(self.rule_groups[rl_call.decl().name()]):
+            rl_path_rec, rl_path_iter = itertools.tee(rl_path_rec)
             head, tail = BMC.split_rule(r)
             assert z3.is_app_of(head, z3.Z3_OP_UNINTERPRETED)
 
@@ -255,8 +257,8 @@ class NonlinearBMC(BMC):
                 rl_path_c = random_string(12)
                 if rl_call.decl().name() == c.decl().name() and not rec_call:
                     # reuse the path only for the frst recursive call
-                    rec_call = True
-                    rl_path_c = rl_path_rec
+                    #rec_call = True
+                    rl_path_c = next(rl_path_iter)
                 args = [ exp == sym for exp,sym in LinearBMC.mk_args(c, rl_path_c) ]
                 pred = self.mk_reachability_literal(c, rl_path_c)
                 new_calls.add(pred)
